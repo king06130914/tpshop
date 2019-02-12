@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{$page_title}</title>
+    <meta name="keywords" content="{$page_keywords}" />
+    <meta name="description" content="{$page_description}" />
+    <link type="text/css" rel="stylesheet" href="__IPUBLIC__/css/style.css" />
+    {volist name="page_css" id="v"}
+    <link type="text/css" rel="stylesheet" href="__IPUBLIC__/css/{$v}.css" />
+    {/volist}
+    <script type="text/javascript" src="__IPUBLIC__/js/jquery-1.11.1.min_044d0927.js"></script>
+    <script type="text/javascript" src="__IPUBLIC__/js/jquery.bxslider_e88acd1b.js"></script>
+    <script type="text/javascript" src="__IPUBLIC__/js/jquery-1.8.2.min.js"></script>
+
+    <script type="text/javascript" src="__IPUBLIC__/js/iban.js"></script>
+    <script type="text/javascript" src="__IPUBLIC__/js/hban.js"></script>
+    <script type="text/javascript" src="__IPUBLIC__/js/num.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/plugins/layer/layer.js"></script>
+</head>
+<body>
+<!--Begin Header Begin-->
+<div class="soubg">
+    <div class="sou">
+        <!--Begin 所在收货地区 Begin-->
+        <span class="s_city_b">
+        	<span class="fl">送货至：</span>
+            <span class="s_city">
+                {if condition="isset($pro_name)"}
+            	<span class="current">{$pro_name.region_name}</span>
+                {else /}
+                <span class="current">四川</span>
+                {/if}
+                <div class="s_city_bg">
+                	<div class="s_city_t"></div>
+                    <div class="s_city_c">
+                    	<h2>请选择所在的收货地区</h2>
+                        <table border="0" class="c_tab" style="width:235px; margin-top:10px;" cellspacing="0" cellpadding="0">
+                            {volist name="listpro" id="item"}
+                            <tr>
+                            <th>{$key}</th>
+                            <td class="c_h">
+                                {volist name="item" id="vo"}
+                                {if condition="isset($pro_name.region_name)"}
+                                <span {if condition="$vo eq $pro_name.region_name"}class="c_check"{/if}><a onclick="changePro(this)">{$vo}</a></span>
+                                {else /}
+                                <span {if condition="$vo eq '四川'"}class="c_check"{/if}><a onclick="changePro(this)">{$vo}</a></span>
+                                {/if}
+                                {/volist}
+                            </td>
+                          </tr>
+                            {/volist}
+                        </table>
+                    </div>
+                </div>
+            </span>
+        </span>
+        <!--End 所在收货地区 End-->
+        <span class="fr">
+        	<span class="fl">
+                <a href="{:url('/')}">首页</a>&nbsp;|
+                {if condition="session('web_user') neq null"}
+                你好，<a href="{:url('member/index')}" style="font-size: 18px;font-weight: bold;">{:input('session.web_user')}</a> | <a href="{:url('login/logout')}" style="color:#ff4e00;">退出</a>
+                {else /}
+                你好，请<a href="{:url('login/login')}">登录</a>&nbsp; <a href="{:url('login/regist')}" style="color:#ff4e00;">免费注册</a>
+                {/if}
+
+                &nbsp;|&nbsp;<a href="{:url('member/index')}">个人中心</a>&nbsp;</span>
+            <span class="fl">|&nbsp;关注我们：</span>
+            <span class="s_sh"><a href="#" class="sh1">新浪</a><a href="#" class="sh2">微信</a></span>
+            <span class="fr">|&nbsp;<a href="#">手机版&nbsp;<img src="__IPUBLIC__/images/s_tel.png" align="absmiddle" /></a></span>
+        </span>
+    </div>
+</div>
+
+{__CONTENT__}
+
+<!--Begin Footer Begin -->
+<div class="b_btm_bg b_btm_c">
+    <div class="b_btm">
+        <table border="0" style="width:210px; height:62px; float:left; margin-left:75px; margin-top:30px;" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="72"><img src="__IPUBLIC__/images/b1.png" width="62" height="62" /></td>
+                <td><h2>正品保障</h2>正品行货  放心购买</td>
+            </tr>
+        </table>
+        <table border="0" style="width:210px; height:62px; float:left; margin-left:75px; margin-top:30px;" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="72"><img src="__IPUBLIC__/images/b2.png" width="62" height="62" /></td>
+                <td><h2>满38包邮</h2>满38包邮 免运费</td>
+            </tr>
+        </table>
+        <table border="0" style="width:210px; height:62px; float:left; margin-left:75px; margin-top:30px;" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="72"><img src="__IPUBLIC__/images/b3.png" width="62" height="62" /></td>
+                <td><h2>天天低价</h2>天天低价 畅选无忧</td>
+            </tr>
+        </table>
+        <table border="0" style="width:210px; height:62px; float:left; margin-left:75px; margin-top:30px;" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="72"><img src="__IPUBLIC__/images/b4.png" width="62" height="62" /></td>
+                <td><h2>准时送达</h2>收货时间由你做主</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="b_nav">
+    <dl>
+        <dt><a href="#">新手上路</a></dt>
+        <dd><a href="#">售后流程</a></dd>
+        <dd><a href="#">购物流程</a></dd>
+        <dd><a href="#">订购方式</a></dd>
+        <dd><a href="#">隐私声明</a></dd>
+        <dd><a href="#">推荐分享说明</a></dd>
+    </dl>
+    <dl>
+        <dt><a href="#">配送与支付</a></dt>
+        <dd><a href="#">货到付款区域</a></dd>
+        <dd><a href="#">配送支付查询</a></dd>
+        <dd><a href="#">支付方式说明</a></dd>
+    </dl>
+    <dl>
+        <dt><a href="{:url('Member/index')}">会员中心</a></dt>
+        <dd><a href="{:url('Account/money')}">资金管理</a></dd>
+        <dd><a href="{:url('Member/collect')}">我的收藏</a></dd>
+        <dd><a href="{:url('Order/index')}">我的订单</a></dd>
+    </dl>
+    <dl>
+        <dt><a href="#">服务保证</a></dt>
+        <dd><a href="#">退换货原则</a></dd>
+        <dd><a href="#">售后服务保证</a></dd>
+        <dd><a href="#">产品质量保证</a></dd>
+    </dl>
+    <dl>
+        <dt><a href="#">联系我们</a></dt>
+        <dd><a href="#">网站故障报告</a></dd>
+        <dd><a href="#">购物咨询</a></dd>
+        <dd><a href="#">投诉与建议</a></dd>
+    </dl>
+    <div class="b_tel_bg">
+        <a href="#" class="b_sh1">新浪微博</a>
+        <a href="#" class="b_sh2">腾讯微博</a>
+        <p>
+            服务热线：<br />
+            <span>400-123-4567</span>
+        </p>
+    </div>
+    <div class="b_er">
+        <div class="b_er_c"><img src="__IPUBLIC__/images/er.gif" width="118" height="118" /></div>
+        <img src="__IPUBLIC__/images/ss.png" />
+    </div>
+</div>
+<div class="btmbg">
+    <div class="btm">
+        www.zhoujielun.online  2017 嘉悠商城网 <br />
+        <img src="__IPUBLIC__/images/b_1.gif" width="98" height="33" /><img src="__IPUBLIC__/images/b_2.gif" width="98" height="33" /><img src="__IPUBLIC__/images/b_3.gif" width="98" height="33" /><img src="__IPUBLIC__/images/b_4.gif" width="98" height="33" /><img src="__IPUBLIC__/images/b_5.gif" width="98" height="33" /><img src="__IPUBLIC__/images/b_6.gif" width="98" height="33" />
+    </div>
+</div>
+<!--End Footer End -->
+</div>
+
+</body>
+{volist name="page_js" id="v"}
+<script type="text/javascript" src="__IPUBLIC__/js/{$v}.js"></script>
+{/volist}
+
+<script>
+    function changePro(obj) {
+        var _this = $(obj);
+        $('.s_city_c span').removeClass('c_check');
+        _this.parent().addClass('c_check');
+        $('.current').html(_this.html());
+    }
+</script>
+</html>

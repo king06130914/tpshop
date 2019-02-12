@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title></title>
+    <link href="__APUBLIC__/styles/general.css" rel="stylesheet" type="text/css" />
+    <link href="__APUBLIC__/styles/main.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="__APUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__APUBLIC__/js/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+<h1>
+    <span class="action-span"><a href="{$page_btn_link}">{$page_btn_name}</a></span>
+    <span class="action-span1"><a href="{:url('index/main')}">SHOP 管理中心 </a> </span><span id="search_id" class="action-span1"> - {$page_title} </span>
+    <div style="clear:both"></div>
+</h1>
+
+{__CONTENT__}
+
+<div id="footer">
+    版权所有 &copy; thinkphp5 -  PHP</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/plugins/layer/layer.js"></script>
+<script>
+    //鼠标移入移出变色
+    $(function(){
+        $("#listDiv tr:gt(0):not(:last)").hover(function(){
+            $(this).children().css('background-color','rgb(244, 250, 251)');
+        },function(){
+            $(this).children().css('background-color','');
+        });
+    });
+</script>
+</body>
+</html>

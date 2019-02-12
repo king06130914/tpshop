@@ -1,0 +1,103 @@
+<div class="top">
+    <div class="logo"><a href="{:url('/')}"><img src="__IPUBLIC__/images/logo.png" /></a></div>
+    <div class="search">
+        <form action="{:url('Search/search')}" method="get">
+            <input type="text" name="search_goods" value="" class="s_ipt" />
+            <input type="submit" value="搜索" class="s_btn" />
+        </form>
+    </div>
+    <div class="i_car">
+        <div class="car_t"><a href="{:url('cart/buycar1')}">购物车 [ <span>{$cartData|count}</span> ]</a></div>
+        <div class="car_bg">
+            <!--Begin 购物车未登录 Begin-->
+            {if condition="$web_user neq null"}
+            <div style="margin-left: 20px;">你好，<a href="{:url('member/index')}" >{:input('session.web_user')}</a>，你已经登录 | <a href="{:url('cart/buycar1')}" style="color:#ff4e00;">查看购物车！</a></div>
+            {else /}
+            <div class="un_login">还未登录！<a href="{:url('login/login')}" style="color:#ff4e00;">马上登录</a> 查看购物车！</div>
+            {/if}
+            <!--End 购物车未登录 End-->
+            <!--Begin 购物车已登录 Begin-->
+            <ul class="cars">
+                <?php $total = 0; //总价
+                foreach($cartData as $k=>$v):?>
+                <li>
+                    <div class="img"><a href="{:url('index/detail', ['goods_id' => $v.goods_id])}"><img src="__PUBLIC__/../{$v.goods_thumb}" width="58" height="58" /></a></div>
+                    <div class="name"><a href="{:url('index/detail', ['goods_id' => $v.goods_id])}">{$v.goods_name}</a></div>
+                    <div class="price"><font color="#ff4e00">￥{$v['shop_price']}</font> X {$v['goods_number']}</div>
+                </li>
+                <?php $xj = $v['shop_price']*$v['goods_number']; $total+=$xj; ?>
+                <?php endforeach;?>
+            </ul>
+            <div class="price_sum">共计&nbsp; <font color="#ff4e00">￥</font><span>{$total}</span></div>
+            <div class="price_a"><a href="{:url('cart/buycar1')}">去购物车结算</a></div>
+            <!--End 购物车已登录 End-->
+        </div>
+    </div>
+</div>
+<!--End Header End-->
+<!--Begin Menu Begin-->
+<div class="menu_bg">
+    <div class="menu">
+        <!--Begin 商品分类详情 Begin-->
+        <div class="nav">
+            <div class="nav_t">全部商品分类</div>
+            <div class="leftNav {eq name='show_nav' value='0'}none{/eq}">
+                <ul>
+                    <!--循环顶级分类-->
+                    {volist name="catData" id="v"}
+                    <li>
+                        <div class="fj">
+                            <span class="n_img"><span></span><img src="__IPUBLIC__/images/nav1.png" /></span>
+                            <span class="fl">
+                                <a href="{:url('Search/search?cat_id='.$v['cat_id'])}" style="color:#fff;">{$v.cat_name}</a>
+                            </span>
+                        </div>
+                        <div class="zj">
+                            <div class="zj_l">
+                                {volist name="v.children" id="v1"}
+                                <div class="zj_l_c">
+                                    <h2><a href="{:url('Search/search?cat_id='.$v1['cat_id'])}">{$v1.cat_name}</a></h2>
+                                    {volist name="v1.children" id="v2"}
+                                    <a href="{:url('Search/search?cat_id='.$v2['cat_id'])}">{$v2.cat_name}</a>|
+                                    {/volist}
+                                </div>
+                                {/volist}
+                            </div>
+                            <div class="zj_r">
+                                <a href="#"><img src="__IPUBLIC__/images/n_img1.jpg" width="236" height="200" /></a>
+                                <a href="#"><img src="__IPUBLIC__/images/n_img2.jpg" width="236" height="200" /></a>
+                            </div>
+                        </div>
+                    </li>
+                    {/volist}
+                </ul>
+            </div>
+        </div>
+        <!--End 商品分类详情 End-->
+        <ul class="menu_r">
+            <li><a href="{:url('/')}">首页</a></li>
+            {volist name="typeData" id="v"}
+                <li><a href="{:url('Search/search?type_id='.$v['type_id'])}">{$v.type_name}</a></li>
+            {/volist}
+        </ul>
+        <!--<div class="m_ad">中秋送好礼！</div>-->
+    </div>
+</div>
+<!--End Menu End-->
+<script>
+    $(function(){
+        $(".leftNav ul li").hover(
+            function(){
+                $(this).find(".fj").addClass("nuw");
+                $(this).find(".fj").find('a').css('color', '#ff4e00');
+                $(this).find(".zj").show();
+            },
+            function(){
+                $(this).find(".fj").removeClass("nuw");
+                $(this).find(".fj").find('a').css('color', '#fff');
+                $(this).find(".zj").hide();
+            }
+        )
+    })
+
+</script>

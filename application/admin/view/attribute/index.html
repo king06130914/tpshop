@@ -1,0 +1,100 @@
+<div class="form-div">
+    <form action="" name="searchForm" method="get">
+        <img src="__APUBLIC__/images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH">
+        <!-- 商品类型 -->
+        按商品类型显示：
+        <select name="type_id">
+            <option value="0">所有商品类型</option>
+            {volist name="type" id="v"}
+            <option value="{$v['type_id']}" {if condition="$v.type_id eq $id"}selected{/if}>{$v['type_name']}</option>
+            {/volist}
+        </select>
+    </form>
+</div>
+<form method="post" action="" name="listForm">
+    <!-- start goods cat list -->
+    <div class="list-div" id="listDiv">
+
+        <table width="100%" cellpadding="3" cellspacing="1" id="listTable">
+            <tbody>
+            <tr class="top">
+                <th>序号</th>
+                <th>属性名称</th>
+                <th>商品类型</th>
+                <th>属性值的录入方式</th>
+                <th>可选值列表</th>
+                <th>排序</th>
+                <th>操作</th>
+            </tr>
+            {volist name="info" id="v"}
+                <tr align="center" class="attr">
+                    <td>{$v.attr_id}</td>
+                    <td>{$v.attr_name}</td>
+                    <td>{$typeIdToName[$v.type_id]}</td>
+                    <td>{$input_type[$v.attr_input_type]}</td>
+                    <td>{$v.attr_value}</td>
+                    <td>{$v.sort_order}</td>
+                    <td>
+                        <a href="{:url('edit', ['id'=> $v.attr_id ])}" title="编辑"><img src="__APUBLIC__/images/icon_edit.gif" border="0" height="16" width="16"></a>
+                        <a href="{:url('del', ['id'=> $v.attr_id, 'type_id'=> $v.type_id ])}" onclick="if(confirm('确实要删除这条属性吗？')) return true;else return false;" title="移除"><img src="__APUBLIC__/images/icon_drop.gif" border="0" height="16" width="16"></a>
+                    </td>
+                </tr>
+            {/volist}
+            <tr>
+                <td align="right" nowrap="true" colspan="7" style="background-color: rgb(255, 255, 255);">
+                    {$page_list}
+                </td>
+            </tr>
+            </tbody></table>
+
+    </div>
+    <!-- end goods cat list -->
+</form>
+
+<script>
+    //当选择类型时执行AJAX取出类型的属性
+    $("select[name=type_id]").change(function(){
+        //获取选中的类型的id
+        var type_id = $(this).val();
+
+        var typeIdToName = <?php echo json_encode($typeIdToName);?>;
+        var input_type = <?php echo json_encode($input_type);?>;
+        if(type_id != ""){
+            $.ajax({
+                type:'GET',
+                url:"{:url('ajaxGetAttrByType')}",
+                data: {id: type_id},
+                dataType:"json",
+                success:function(result){
+                    if(result.state == 200){
+                        //列表追加
+                        var html = '';
+                        $.each(result.data, function (key, value) {
+                            html += '<tr align="center" class="attr">';
+                            html += '<td>' + value['attr_id'] + '</td>';
+                            html += '<td>' + value['attr_name'] + '</td>';
+                            html += '<td>' + typeIdToName[value['type_id']] + '</td>';
+                            html += '<td>' + input_type[value['attr_input_type']] + '</td>';
+                            if(value['attr_value'] == null){
+                                html += '<td></td>';
+                            }else{
+                                html += '<td>' + value['attr_value'] + '</td>';
+                            }
+
+                            html += '<td>' + value['sort_order'] + '</td>';
+                            html += '<td>' +
+                                '<a href="{:url(\'edit\', [\'id\'=> "+ value.attr_id + " ])}" title="编辑"><img src="__APUBLIC__/images/icon_edit.gif" border="0" height="16" width="16"></a>' +
+                                '<a href="{:url(\'del\', [\'id\'=> " + value.attr_id + ", \'type_id\'=> $v.type_id ])}" onclick="if(confirm(\'确实要删除这条属性吗？\')) return true;else return false;" title="移除"><img src="__APUBLIC__/images/icon_drop.gif" border="0" height="16" width="16"></a>' +
+                                '</td>';
+                            html += '</tr>';
+                        });
+                        $('#listTable .attr').remove();
+                        $('#listTable .top').after(html);
+                    }else{
+                        layer.msg(result.info, {time:1000,icon: 5});
+                    }
+                }
+            });
+        }
+    });
+</script>

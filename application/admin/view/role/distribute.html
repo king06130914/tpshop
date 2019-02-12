@@ -1,0 +1,33 @@
+
+<div class="main-div">
+    <form action="{:url('distribute')}" method="post">
+        <input type="hidden" name="id" value="{$info.role_id}" />
+        <table cellspacing="1" id="list-table">
+            {volist name='auth_infoA' id="v"}
+                <tr>
+                    <td width="25%" valign="top" class="first-cell" style="border-bottom: 1px solid gray;">
+                        <input name="auth_id[]" type="checkbox" value="{$v['auth_id']}" class="checkbox"
+                        {if condition="in_array($v['auth_id'],$authidsarr)"}checked='checked'{/if}
+                        />{$v['auth_name']}
+                    </td>
+                    <td width="75%" style="border-bottom: 1px solid gray;">
+                        {volist name='auth_infoB' id="vv"}
+                            {if condition="$vv['auth_pid'] eq $v['auth_id']"}
+                                <div style="width:200px;float: left;">
+                                    <input name="auth_id[]" type="checkbox" value="{$vv['auth_id']}"
+                                    {if condition="in_array($vv['auth_id'],$authidsarr)"}checked='checked'{/if}
+                                    />{$vv['auth_name']}
+                                </div>
+                            {/if}
+                        {/volist}
+                    </td>
+                </tr>
+            {/volist}
+            <tr align="center">
+                <td colspan="2">
+                    <input type="submit" value=" 分配权限 " class="button">
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

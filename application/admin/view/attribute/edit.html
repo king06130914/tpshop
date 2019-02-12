@@ -1,0 +1,82 @@
+
+<div class="main-div">
+    <form action="" method="post" name="theForm">
+        <input type="hidden" name="attr_id" value="{$info.attr_id}" size="30">
+        <table width="100%" id="general-table">
+            <tbody><tr>
+                <td class="label">属性名称：</td>
+                <td>
+                    <input type="text" name="attr_name" value="{$info.attr_name}" size="30">
+                    <span class="require-field">*</span></td>
+            </tr>
+            <tr>
+                <td class="label">所属商品类型：</td>
+                <td>
+                    <select name="type_id">
+                        <option value="">请选择...</option>
+                        {volist name="type" id="v"}
+                        <option value="{$v.type_id}"
+                                {if condition="$v.type_id eq $info.type_id"}selected{/if}
+                        >{$v.type_name}</option>
+                        {/volist}
+                    </select>
+                    <span class="require-field">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="label"><a href="javascript:showNotice('noticeAttrType');" title="点击此处查看提示信息">
+                    <img src="__PUBLIC__/admin/images/notice.gif" width="16" height="16" border="0" alt="点击此处查看提示信息"></a>属性是否可选
+                </td>
+                <td>
+                    <input type="radio" name="attr_type" value="0" {eq name="info.attr_type" value="0"}checked{/eq} > 唯一属性
+                    <input type="radio" name="attr_type" value="1" {eq name="info.attr_type" value="1"}checked{/eq}> 单选属性
+                    <input type="radio" name="attr_type" value="2" {eq name="info.attr_type" value="2"}checked{/eq}> 复选属性
+                    <br><span class="notice-span" style="display:block" id="noticeAttrType">
+            选择"单选/复选属性"时，可以对商品该属性设置多个值，同时还能对不同属性值指定不同的价格加价，
+            用户购买商品时需要选定具体的属性值。选择"唯一属性"时，商品的该属性值只能设置一个值，用户只能查看该值。</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">该属性值的录入方式：</td>
+                <td>
+                    <input type="radio" name="attr_input_type" value="0" {eq name="info.attr_input_type" value="0"}checked{/eq} >
+                    手工录入
+                    <input type="radio" name="attr_input_type" value="1" {eq name="info.attr_input_type" value="1"}checked{/eq} >
+                    从下面的列表中选择（一行代表一个可选值）
+                    <input type="radio" name="attr_input_type" value="2" {eq name="info.attr_input_type" value="2"}checked{/eq} >
+                    多行文本框        </td>
+            </tr>
+            <tr>
+                <td class="label">可选值列表：</td>
+                <td>
+                    <textarea name="attr_value" cols="30" rows="5" disabled="">{$info.attr_value}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">排序依据：</td>
+                <td>
+                    <input type="text" name="sort_order" value="{$info.sort_order}" size="30">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="button-div">
+                        <input type="submit" value=" 确定 " class="button">
+                        <input type="reset" value=" 重置 " class="button">
+                    </div>
+                </td>
+            </tr>
+            </tbody></table>
+    </form>
+</div>
+<script>
+    $("input[name='attr_input_type']").eq(1).click(function(){
+        $('textarea').removeAttr('disabled');
+    });
+    $("input[name='attr_input_type']").eq(0).click(function(){
+        $('textarea').attr('disabled','disabled');
+    });
+    if($("input[name='attr_input_type']").eq(1).attr("checked")){
+        $('textarea').removeAttr('disabled');
+    }
+</script>

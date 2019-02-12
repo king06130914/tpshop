@@ -1,0 +1,42 @@
+{include file="layout/header" /}
+<div class="i_bg bg_color">
+    <!--Begin 用户中心 Begin -->
+    <div class="m_content">
+        {include file="layout/left" /}
+        <div class="m_right">
+            <div class="m_des">
+                <table border="0" style="width:870px; line-height:22px;" cellspacing="0" cellpadding="0">
+                    <tr valign="top">
+                        <td width="115"><img src="__IPUBLIC__/images/user.jpg" width="90" height="90" /></td>
+                        <td>
+                            <div class="m_user">{$userInfo.username}</div>
+                            <p>
+                                等级：注册用户 <br />
+                                上一次登录时间: {$userInfo.last_time|date='Y-m-d H:i:s',###}<br />
+                                您还没有通过邮件认证 <a href="#" style="color:#ff4e00;">点此发送认证邮件</a>
+                            </p>
+                            <div class="m_notice">
+                                用户中心公告！
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="mem_t">账号信息</div>
+            <table border="0" class="mon_tab" style="width:870px; margin-bottom:20px;" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="40%">用户ID：<span style="color:#555555;">{$userInfo.user_id}</span></td>
+                    <td width="60%">用户昵称：<span style="color:#555555;">{$userInfo.name}</span></td>
+                </tr>
+                <tr>
+                    <td>电&nbsp; &nbsp; 话：<span style="color:#555555;">{$userInfo.user_tel}</span></td>
+                    <td>邮&nbsp; &nbsp; 箱：<span style="color:#555555;">{$userInfo.user_email}</span></td>
+                </tr>
+                <tr>
+                    <td>Q&nbsp; &nbsp; Q：<span style="color:#555555;">{$userInfo.user_qq}</span></td>
+                    <td>注册时间：<span style="color:#555555;">{$userInfo.user_time|date='Y-m-d H:i:s',###}</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!--End 用户中心 End-->

@@ -1,0 +1,44 @@
+<div class="form-div">
+    <form action="" method="get" name="searchForm">
+        网站名称<input type="text" name="title" {if condition="isset($search.title)"}value="{$search.title}"{/if}/>
+        <input type="submit" value=" 搜索 " class="button">
+    </form>
+</div>
+
+<form method="post" action="" name="listForm">
+    <!-- start goods type list -->
+    <div class="list-div" id="listDiv">
+
+        <table width="100%" cellpadding="3" cellspacing="1" id="listTable">
+            <tbody>
+            <tr>
+                <th>序号</th>
+                <th>网站名称</th>
+                <th>网站链接</th>
+                <th>网站权重</th>
+                <th>添加时间</th>
+                <th>操作</th>
+            </tr>
+            {volist name="info" id="v"}
+                <tr align="center">
+                    <td>{$v.id}</td>
+                    <td >{$v.title}</td>
+                    <td >{$v.alink}</td>
+                    <td >{$v.weight}</td>
+                    <td>{$v.add_time|date='Y-m-d H:i:s',###}</td>
+                    <td>
+                        <a href="{:url('edit', ['id'=> $v.id ])}" title="编辑">编辑</a> |
+                        <a href="{:url('del', ['id'=> $v.id ])}" onclick="if(confirm('确实要删除这条友情链接吗？')) return true;else return false;" title="移除">移除</a>
+                    </td>
+                </tr>
+            {/volist}
+            <tr>
+                <td align="right" nowrap="true" colspan="6" style="background-color: rgb(255, 255, 255);">
+                    {$page_list}
+                </td>
+            </tr>
+            </tbody></table>
+
+    </div>
+    <!-- end goods type list -->
+</form>

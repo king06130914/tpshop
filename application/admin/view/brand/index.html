@@ -1,0 +1,46 @@
+
+<div class="form-div">
+    <form action="" name="searchForm" method="get">
+        <img src="__APUBLIC__/images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH">
+        品牌名称<input type="text" name="brand_name" {if condition="isset($search.brand_name)"}value="{$search.brand_name}"{/if} size="15">
+        <input type="submit" value=" 搜索 " class="button">
+    </form>
+</div>
+
+<form method="post" action="" name="listForm">
+    <!-- start brand list -->
+    <div class="list-div" id="listDiv">
+
+        <table cellpadding="3" cellspacing="1">
+            <tbody>
+            <tr>
+                <th>序号</th>
+                <th>品牌名称</th>
+                <th>logo图片</th>
+                <th>品牌描述</th>
+                <th>品牌网址</th>
+                <th>操作</th>
+            </tr>
+            {volist name="info" id="v"}
+                <tr align="center">
+                    <td>{$v.brand_id}</td>
+                    <td>{$v.brand_name}</td>
+                    <td><img src="__PUBLIC__/../{$v.brand_logo}" width="80"></td>
+                    <td align="left" width="600">{$v.brand_desc}</td>
+                    <td align="left" width="100">{$v.brand_url}</td>
+                    <td>
+                        <a href="{:url('edit', ['id'=> $v.brand_id ])}" title="编辑">编辑</a> |
+                        <a href="{:url('del', ['id'=> $v.brand_id ])}" onclick="if(confirm('确实要删除这条品牌信息吗？')) return true;else return false;" title="编辑">移除</a>
+                    </td>
+                </tr>
+            {/volist}
+            <tr>
+                <td align="right" nowrap="true" colspan="6">
+                    {$page_list}
+                </td>
+            </tr>
+            </tbody></table>
+
+        <!-- end brand list -->
+    </div>
+</form>

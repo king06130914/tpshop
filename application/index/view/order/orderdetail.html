@@ -1,0 +1,67 @@
+{include file="layout/header" /}
+<div class="i_bg bg_color">
+    <!--Begin 用户中心 Begin -->
+    <div class="m_content">
+        {include file="layout/left" /}
+        <div class="m_right">
+            <p></p>
+            <div class="mem_tit">订单详情</div>
+            <table border="0" class="order_tab" style="width:930px; text-align:center; margin-bottom:30px;" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td>订单ID</td>
+                    <td>商品ID</td>
+                    <td>商品名称</td>
+                    <td >商品图片</td>
+                    <td >商品属性</td>
+                    <td>成交价格</td>
+                    <td >购买数量</td>
+                    <td>商品小计</td>
+                    <td>操作</td>
+                </tr>
+                {volist name="orderInfo" id="v"}
+                    <tr>
+                        <td><font color="#ff4e00">{$v.order_id}</font></td>
+                        <td>{$v.goods_id}</td>
+                        <td><a href="{:url('index/detail', ['goods_id' => $v.goods_id])}">{$v.goods_name}</a></td>
+                        <td><a href="{:url('index/detail', ['goods_id' => $v.goods_id])}"><img src="__PUBLIC__/../{$v.goods_thumb}" width="73" height="73" /></a></td>
+                        <td>{$v.goods_attr_str}</td>
+                        <td>{$v.shop_price}</td>
+                        <td>{$v.goods_number}</td>
+                        <td>{$v['goods_price'] * $v['goods_number']|sprintf='%.2f',###}</td>
+                        <td>
+                            {if condition="$status['order_status'] eq 4"}
+                                <a goods_id="{$v.goods_id}" order_id="{$v.order_id}" onclick="disp_prompt(this)" href="javascript:void(0)">评价商品</a>
+                                {else/}
+                                <span>你暂时无法评论商品</span>
+                            {/if}
+                        </td>
+                    </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <!--End 用户中心 End-->
+    <script type="text/javascript">
+        function disp_prompt(a) {
+            var comment=prompt("请输入您的评价","");
+            var goods_id= $(a).attr('goods_id');
+            var order_id= $(a).attr('order_id');
+            if(comment == ''){
+                layer.alert('请先输入您的评价！');
+                return false;
+            }
+            $.ajax({
+                type:"POST",
+                url: "{:url('Order/ajaxcomment')}",
+                dataType:'json',
+                data:{'goods_id':goods_id,'comment':comment,'order_id':order_id},
+                success:function(result){
+                    if(result.state == 200){
+                        layer.msg(result.info,{icon: 6});
+                    }else{
+                        layer.msg(result.info,{icon: 5});
+                    }
+                }
+            });
+        }
+    </script>

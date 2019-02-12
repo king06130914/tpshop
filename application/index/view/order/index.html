@@ -1,0 +1,60 @@
+{include file="layout/header" /}
+<div class="i_bg bg_color">
+    <!--Begin 用户中心 Begin -->
+    <div class="m_content">
+        {include file="layout/left" /}
+        <div class="m_right">
+            <p></p>
+            <div class="mem_tit">我的订单</div>
+            <table border="0" class="order_tab" style="width:930px; text-align:center; margin-bottom:30px;" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="20%">订单号</td>
+                    <td width="25%">下单时间</td>
+                    <td width="15%">订单总金额</td>
+                    <td width="25%">订单状态</td>
+                    <td width="15%">操作</td>
+                </tr>
+                {volist name="orderInfo" id="v"}
+                    <tr>
+                        <td><font color="#ff4e00"><a href="{:url('orderdetail?order_id='.$v['order_id'])}">{$v.order_sn}</a></font></td>
+                        <td>{$v.order_create_time|date='Y-m-d H:i:s',###}</td>
+                        <td>￥{$v.order_amount|sprintf='%.2f',###}</td>
+                        <td>{$order_status[$v['order_status']]}</td>
+                        <td><a href="{:url('orderdetail?order_id='.$v['order_id'])}">订单详情</a> |
+                            {if condition="$v['order_status'] eq 0"}
+                            <span>此订单已经取消</span>
+                            {elseif condition="$v['order_status'] egt 3"/}
+                            <span>此订单无法取消</span>
+                            {else /}
+                            <a order_id="{$v.order_id}" href="javascript:void(0);" onclick="ordercancel(this);">取消订单</a>
+                            {/if}
+                        </td>
+                    </tr>
+                {/volist}
+            </table>
+        </div>
+    </div>
+    <!--End 用户中心 End-->
+    <script>
+        //使用ajax取消订单
+        function ordercancel(a){
+            var _this = $(a);
+            var order_id = _this.attr('order_id');
+            parent.layer.confirm('你确认要取消订单吗？', function(index, layero) {
+                parent.layer.close(index);//关闭确认框
+                $.ajax({
+                    type: 'post',
+                    url: "{:url('Order/ajaxordercancel','',false)}",
+                    data: {order_id: order_id},
+                    dataType: 'json',
+                    success: function (result) {
+                        if(result.state == '200'){
+                            _this.parent().prev().html('取消');
+                        }else{
+                            layer.msg(result.info,{icon: 5});
+                        }
+                    }
+                });
+            });
+        }
+    </script>

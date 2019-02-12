@@ -1,0 +1,47 @@
+
+<div class="form-div">
+    <form action="" method="get" name="searchForm">
+        会员名：<input type="text" name="name" {if condition="isset($search.name)"}value="{$search.name}"{/if}/>
+        <input type="submit" value=" 搜索 " class="button">
+    </form>
+</div>
+
+<form method="post" action="" name="listForm">
+    <!-- start goods type list -->
+    <div class="list-div" id="listDiv">
+
+        <table width="100%" cellpadding="3" cellspacing="1" id="listTable">
+            <tbody>
+            <tr>
+                <th>序号</th>
+                <th>会员名</th>
+                <th>用户昵称</th>
+                <th>邮箱</th>
+                <th>手机</th>
+                <th>注册时间</th>
+                <th>操作</th>
+            </tr>
+            {volist name="info" id="v"}
+                <tr align="center">
+                    <td>{$v.user_id}</td>
+                    <td >{$v.username}</td>
+                    <td >{$v.name}</td>
+                    <td >{$v.user_email}</td>
+                    <td >{$v.user_tel}</td>
+                    <td>{$v.user_time|date='Y-m-d H:i:s',###}</td>
+                    <td>
+                        <a href="{:url('edit', ['id'=> $v.user_id ])}" title="修改密码">修改密码</a> |
+                        <a href="{:url('del', ['id'=> $v.user_id ])}" onclick="if(confirm('确实要删除这条会员信息吗？')) return true;else return false;" title="移除">移除</a>
+                    </td>
+                </tr>
+            {/volist}
+            <tr>
+                <td align="right" nowrap="true" colspan="7" style="background-color: rgb(255, 255, 255);">
+                    {$page_list}
+                </td>
+            </tr>
+            </tbody></table>
+
+    </div>
+    <!-- end goods type list -->
+</form>

@@ -1,0 +1,199 @@
+
+<div class="tab-div">
+    <!-- tab bar -->
+    <div id="tabbar-div">
+        <p>
+            <span class="tab-front" id="general-tab">通用信息</span>
+            <span class="tab-back" id="detail-tab">详细描述</span>
+            <span class="tab-back" id="mix-tab">其他信息</span>
+            <span class="tab-back" id="properties-tab">商品属性</span>
+            <span class="tab-back" id="gallery-tab">商品相册</span>
+        </p>
+    </div>
+
+    <!-- tab body -->
+    <div id="tabbody-div">
+        <form enctype="multipart/form-data" action="" method="post" name="theForm">
+
+            <!-- 通用信息 -->
+            <table width="90%" id="general-table" align="center" style="display: table;">
+                <tbody>
+                <tr>
+                    <td class="label">商品名称：</td>
+                    <td><input type="text" name="goods_name" size="30"><span class="require-field">*</span></td>
+                </tr>
+                <tr>
+                    <td class="label">商品货号： </td>
+                    <td><input type="text" name="goods_sn" size="20" onblur="checkGoodsSn(this.value,'32')"><span id="goods_sn_notice"></span><br>
+                        <span class="notice-span" style="display:block" id="noticeGoodsSN">如果您不输入商品货号，系统将自动生成一个唯一的货号。</span></td>
+                </tr>
+                <tr>
+                    <td class="label">商品分类：</td>
+                    <td>
+                        <select name="cat_id">
+                            <option value="">请选择...</option>
+                            {volist name="cat" id="v"}
+                                <option value="{$v['cat_id']}">{$ge|str_repeat=count(explode(',',$v['cat_path']))-2}{$v['cat_name']}</option>
+                            {/volist}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">扩展分类：</td>
+                    <td>
+                        <input onclick="$(this).parent().append($(this).next('select').clone());" type="button" value="添加">
+                        <select name="ext_cat_id[]">
+                            <option value="">请选择...</option>
+                            {volist name="cat" id="v"}
+                                <option value="{$v['cat_id']}">{$ge|str_repeat=count(explode(',',$v['cat_path']))-2}{$v['cat_name']}</option>
+                            {/volist}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">商品品牌：</td>
+                    <td>
+                        <select name="brand_id" onchange="hideBrandDiv()">
+                            <option value="0">请选择...</option>
+                            {volist name="brand" id="v"}
+                                <option value="{$v.brand_id}">{$v.brand_name}</option>
+                            {/volist}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">本店售价：</td>
+                    <td>￥ <input type="text" name="shop_price" size="8" onblur="priceSetted()"> 元
+                        <span class="require-field">*</span></td>
+                </tr>
+                <tr>
+                    <td class="label">市场售价：</td>
+                    <td>￥ <input type="text" name="market_price" size="8"> 元</td>
+                </tr>
+
+                <tr>
+                    <td class="label"><label for="is_promote"><input type="checkbox" id="is_promote" name="is_promote" value="" onclick="promote(this);" /> 促销价：</label></td>
+                    <td id="promote_3">￥ <input disabled="disabled" type="text" id="promote_1" name="promote_price" class="promote_price" size="8"> 元</td>
+                </tr>
+                <tr id="promote_4">
+                    <td class="label" id="promote_5">促销日期：</td>
+                    <td id="promote_6">
+                        <input disabled="disabled" name="promote_start_time" class="Wdate promote_price" type="text" onClick="WdatePicker()">--
+                        <input disabled="disabled" name="promote_end_time" class="Wdate promote_price" type="text" onClick="WdatePicker()">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">上传商品图片：</td>
+                    <td><input type="file" name="goods_img" size="35"></td>
+                </tr>
+                </tbody></table>
+
+            <!-- 详细描述 -->
+            <table width="90%" id="detail-table" style="display: none;">
+                <tbody><tr>
+                    <td>
+                        <!-- 加载编辑器的容器 -->
+                        <script id="container" name="goods_desc" type="text/plain">
+
+                        </script>
+                        <!-- 配置文件 -->
+                        <script type="text/javascript" src="__PUBLIC__/plugins/ueditor/ueditor.config.js"></script>
+                        <!-- 编辑器源码文件 -->
+                        <script type="text/javascript" src="__PUBLIC__/plugins/ueditor/ueditor.all.js"></script>
+                        <!-- 实例化编辑器 -->
+                        <script type="text/javascript">
+                            var ue = UE.getEditor('container',{
+                                "initialFrameWidth":"100%",//宽
+                                "initialFrameHeight":300,  //高
+                                "maximumWords":10000 //最大可以输入的字符数量
+                            });
+                        </script>
+                    </td>
+                </tr>
+                </tbody></table>
+
+            <!-- 其他信息 -->
+            <table width="90%" id="mix-table" style="display: none;" align="center">
+                <tbody><tr>
+                    <td class="label"><a href="javascript:showNotice('noticeStorage');" title="点击此处查看提示信息"><img src="__APUBLIC__/images/notice.gif" width="16" height="16" border="0" alt="点击此处查看提示信息"></a> 商品库存数量：</td>
+                    <td><input type="text" name="goods_number" value="" size="20"><br>
+                        <span class="notice-span" style="display:block" id="noticeStorage">库存在商品为虚货或商品存在货品时为不可编辑状态，库存数值取决于其虚货数量或货品数量</span></td>
+                </tr>
+                <tr>
+                    <td class="label">库存警告数量：</td>
+                    <td><input type="text" name="" value="1" size="20"></td>
+                </tr>
+                <tr>
+                    <td class="label">加入推荐：</td>
+                    <td><input type="checkbox" name="is_best" value="0" onclick="this.value= (this.value==1 ? 0 : 1);">精品
+                        <input type="checkbox" name="is_new" value="0" onclick="this.value= (this.value==1 ? 0 : 1);">新品
+                        <input type="checkbox" name="is_hot" value="0" onclick="this.value= (this.value==1 ? 0 : 1);">热销</td>
+                </tr>
+                <tr id="alone_sale_1">
+                    <td class="label" id="alone_sale_2">上架：</td>
+                    <td id="alone_sale_3"><input type="checkbox" name="is_onsale" value="1" checked="checked" onclick="this.value= (this.value==1 ? 0 : 1);"> 打勾表示允许销售，否则不允许销售。</td>
+                </tr>
+                <tr>
+                    <td class="label">商品简单描述：</td>
+                    <td><textarea name="goods_brief" cols="40" rows="3"></textarea></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- 商品属性 -->
+            <table width="100%" id="properties-table" style="display: none;" align="center">
+                <tbody>
+                <tr>
+                    <td class="label"><a href="javascript:showNotice('noticeGoodsType');" title="点击此处查看提示信息"><img src="__APUBLIC__/images/notice.gif" width="16" height="16" border="0" alt="点击此处查看提示信息"></a>商品类型：</td>
+                    <td>
+                        <select name="type_id" onchange="ajaxGetAttr(this);">
+                            <option value="">请选择商品类型</option>
+                            {volist name="type" id="v"}
+                            <option value="{$v.type_id}">{$v.type_name}</option>
+                            {/volist}
+                        </select><br>
+                        <span class="notice-span" style="display:block" id="noticeGoodsType">请选择商品的所属类型，进而完善此商品的属性</span></td>
+                </tr>
+                <tr>
+                    <td id="attr_container" colspan="2"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- 商品相册 -->
+            <table width="90%" id="gallery-table" style="display: none;" align="center">
+                <tbody>
+                <tr><td>&nbsp;</td></tr>
+                <tr>
+                    <td>
+                        <a href="javascript:;" onclick="addImg(this)">[+]</a>
+                        图片描述 <input type="text" name="img_desc[]" size="20">
+                        上传文件 <input type="file" name="goods_pic[]">
+                    </td>
+                </tr>
+                </tbody></table>
+
+            <div class="button-div">
+                <input type="submit" value=" 确定 " class="button">
+                <input type="reset" value=" 重置 " class="button">
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="__APUBLIC__/js/utils.js"></script>
+<script type="text/javascript" src="__APUBLIC__/js/tab.js"></script>
+<script>
+    var attrUrl = "{:url('ajaxGetAttr','',false)}";
+    //添加一个新的属性选择框
+    function addNew(a){
+        var li = $(a).parent();
+        if($(a).html() == '[+]'){
+            var newli = li.clone();
+            newli.find('a').html('[-]');
+            li.after(newli);
+        }else{
+            li.remove();
+        }
+    }
+</script>
+<script type="text/javascript" src="__APUBLIC__/js/goods/goods.js"></script>

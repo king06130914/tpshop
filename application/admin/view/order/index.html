@@ -1,0 +1,56 @@
+
+<div class="form-div">
+    <form action="" method="get" name="searchForm">
+        <img src="__APUBLIC__/images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH">
+        订单编号：<input type="text" name="order_sn" {if condition="isset($search.order_sn)"}value="{$search.order_sn}"{/if} size="15">
+        订单状态：<select name="order_status">
+        <option value="">-请选择-</option>
+        {volist name="status" id="v" key="k"}
+            <option value="{$k-1}" {if condition="isset($search.order_status) and (($k-1) eq $search.order_status)"}selected{/if}>{$v}</option>
+        {/volist}
+    </select>
+        <input type="submit" value=" 搜索 " class="button">
+    </form>
+</div>
+
+<form method="post" action="" name="listForm">
+    <!-- start goods order list -->
+    <div class="list-div" id="listDiv">
+
+        <table width="100%" cellpadding="3" cellspacing="1" id="listTable">
+            <tbody>
+            <tr>
+                <th>序号</th>
+                <th>订单编号</th>
+                <th>下单用户</th>
+                <th>收货人邮箱</th>
+                <th>订单状态</th>
+                <th>订单总金额</th>
+                <th>收货人地址</th>
+                <th>操作</th>
+            </tr>
+            {volist name="info" id="v"}
+                <tr align="center">
+                    <td>{$v.order_id}</td>
+                    <td>{$v.order_sn}</td>
+                    <td>{$user[$v['order_u_id']]}</td>
+                    <td>{$v.order_u_name}</td>
+                    <td>{$status[$v['order_status']]}</td>
+                    <td >{$v.order_amount}</td>
+                    <td>{if condition="isset($address[$v['order_consignee_id']])"}{$address[$v['order_consignee_id']]} {/if}</td>
+                    <td>
+                        <a href="{:url('edit', ['id'=> $v.order_id ])}" title="修改">修改</a> |
+                        <a href="{:url('detail', ['id'=> $v.order_id ])}" title="订单详情">订单详情</a>
+                    </td>
+                </tr>
+            {/volist}
+            <tr>
+                <td align="right" nowrap="true" colspan="10" style="background-color: rgb(255, 255, 255);">
+                    {$page_list}
+                </td>
+            </tr>
+            </tbody></table>
+
+    </div>
+    <!-- end goods order list -->
+</form>

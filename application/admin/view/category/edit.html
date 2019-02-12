@@ -1,0 +1,33 @@
+
+<div class="main-div">
+    <form action="" method="post" name="theForm">
+        <input type="hidden" name="cat_id" value="{$info.cat_id}" />
+        <table cellspacing="1" cellpadding="3" width="100%">
+            <tbody>
+            <tr>
+                <td class="label">商品分类名称:</td>
+                <td><input type="text" name="cat_name" value="{$info.cat_name}" size="40">
+                    <span class="require-field">*</span></td>
+            </tr>
+            <tr>
+                <td class="label">父id:</td>
+                <td>
+                    <select name="cat_pid">
+                        <option value="0">-请选择-</option>
+                        {volist name="cat_info" id="v"}
+                            <option value="{$v['cat_id']}"
+                            {if condition="$info['cat_pid'] eq $v['cat_id']"}selected{/if}
+                            >{$ge|str_repeat=count(explode(',',$v['cat_path']))-2}{$v['cat_name']}</option>
+                        {/volist}
+                    </select>
+                </td>
+            </tr>
+            <tr align="center">
+                <td colspan="2">
+                    <input type="submit" value=" 确定 " class="button">
+                    <input type="reset" value=" 重置 " class="button">
+                </td>
+            </tr>
+            </tbody></table>
+    </form>
+</div>

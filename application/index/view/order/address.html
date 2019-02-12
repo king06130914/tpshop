@@ -1,0 +1,87 @@
+{include file="layout/header" /}
+<div class="i_bg bg_color">
+    <!--Begin 用户中心 Begin -->
+    <div class="m_content">
+        {include file="layout/left" /}
+        <div class="m_right">
+            <p></p>
+            <div class="mem_tit">收货地址</div>
+            {volist name="addressInfo" id="v"}
+                <div class="address">
+
+                    <div class="a_close"><a address_id="{$v.address_id}" href="javascript:void(0);" onclick="delAddress(this)"><img src="__IPUBLIC__/images/a_close.png" /></a></div>
+                    <table border="0" class="add_t" align="center" style="width:98%; margin:10px auto;" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="right" width="80">收货人姓名：</td>
+                            <td>{$v.consignee}</td>
+                        </tr>
+                        <tr>
+                            <td align="right">配送区域：</td>
+                            <td>{$v['province']}{$v['city']}{$v['district']}{$v['street']}</td>
+                        </tr>
+                        <tr>
+                            <td align="right">详细地址：</td>
+                            <td>{$v.detail_address}</td>
+                        </tr>
+                        <tr>
+                            <td align="right">电话：</td>
+                            <td>{$v.telephone}</td>
+                        </tr>
+                        <tr>
+                            <td align="right">电子邮箱：</td>
+                            <td>{$v.email}</td>
+                        </tr>
+                    </table>
+
+                    <p align="right">
+                        <a href="#" style="color:#ff4e00;">设为默认</a>  &nbsp; &nbsp;   <a class="open_btn" onclick="showModal('编辑地址信息', 'order/editAddress','{$v.address_id}');" style="color:#ff4e00;">编辑</a>
+                    </p>
+
+                </div>
+            {/volist}
+
+            <div class="mem_tit">
+                <a class="open_btn" onclick="showModal('编辑地址信息', 'order/addAddress','');"><img src="__IPUBLIC__/images/add_ad.gif" /></a>
+            </div>
+        </div>
+    </div>
+    <!--End 用户中心 End-->
+    <script>
+        //添加或修改地址的弹出框
+        function showModal(title, url, id) {
+            //弹出层
+            parent.layer.open({
+                skin: 'layer-ext-default',
+                type: 2,
+                title: title,
+                maxmin: false,
+                shadeClose: false,
+                area : ['780px' , '450px'],
+                content: "{:url('"+ url +"/id','',false)}/"+id,
+                end: function() {         //层被彻底关闭后执行的回调函数
+                }
+            });
+        }
+
+        //ajax实现删除地址
+        function delAddress(a){
+            var _this = $(a);
+            var id = _this.attr('address_id');
+            parent.layer.confirm('确定要删除此地址信息吗？', function(index, layero) {
+                parent.layer.close(index);//关闭确认框
+                $.ajax({
+                    type: 'post',
+                    url: "{:url('order/delAddress','',false)}",
+                    data: {address_id: id},
+                    dataType: 'json',
+                    success: function (result) {
+                        if(result.state == '200'){
+                            _this.parent().parent().remove();
+                        }else{
+                            layer.msg(result.info,{icon: 5});
+                        }
+                    }
+                });
+            });
+        }
+    </script>

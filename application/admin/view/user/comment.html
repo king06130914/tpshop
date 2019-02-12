@@ -1,0 +1,49 @@
+<div class="form-div">
+    <form action="" method="get" name="searchForm">
+        用户名：<input type="text" name="sender" {if condition="isset($search.sender)"}value="{$search.sender}"{/if}/>
+        状态：<select name="state">
+        <option value="">请选择</option>
+        <option value="0" {if condition="isset($search.state) and ($search.state eq 0)"}selected{/if}>隐藏</option>
+        <option value="1" {if condition="isset($search.state) and ($search.state eq 1)"}selected{/if}>显示</option>
+    </select>
+        <input type="submit" value=" 搜索 " class="button">
+    </form>
+</div>
+
+<form method="post" action="" name="listForm">
+    <!-- start goods type list -->
+    <div class="list-div" id="listDiv">
+
+        <table width="100%" cellpadding="3" cellspacing="1" id="listTable">
+            <tbody>
+            <tr>
+                <th>序号</th>
+                <th>用户名</th>
+                <th>评论对象</th>
+                <th>评论时间</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            {volist name="info" id="v"}
+                <tr align="center">
+                    <td>{$v.id}</td>
+                    <td >{$v.sender}</td>
+                    <td >{$v.receiver}</td>
+                    <td >{$v.add_time|date='Y-m-d H:i:s',###}</td>
+                    <td >{$state[$v['state']]}</td>
+                    <td>
+                        <a href="{:url('detail', ['id'=> $v.id ])}" title="查看详情">查看详情</a> |
+                        <a href="{:url('com_del', ['id'=> $v.id ])}" onclick="if(confirm('确实要删除这条评论信息吗？')) return true;else return false;" title="移除">移除</a>
+                    </td>
+                </tr>
+            {/volist}
+            <tr>
+                <td align="right" nowrap="true" colspan="6" style="background-color: rgb(255, 255, 255);">
+                    {$page_list}
+                </td>
+            </tr>
+            </tbody></table>
+
+    </div>
+    <!-- end goods type list -->
+</form>

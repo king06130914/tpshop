@@ -1,0 +1,38 @@
+
+<form method="post" action="" name="listForm">
+    <!-- start goods Article list -->
+    <div class="list-div" id="listDiv">
+
+        <table width="100%" cellpadding="3" cellspacing="1" id="listTable">
+            <tbody>
+            <tr>
+                <th>序号</th>
+                <th>配送方式名称</th>
+                <th>配送方式描述</th>
+                <th>保价费用</th>
+                <th>是否启用</th>
+                <th>操作</th>
+            </tr>
+            {volist name="info" id="v"}
+                <tr align="center">
+                    <td>{$v.shipping_id}</td>
+                    <td>{$v.shipping_name}</td>
+                    <td width="600">{$v.shipping_desc}</td>
+                    <td>{$v.shipping_fee}</td>
+                    <td>{$enabled[$v['enabled']]}</td>
+                    <td>
+                        <a href="{:url('edit', ['id'=> $v.shipping_id ])}" title="编辑">编辑</a> |
+                        <a href="{:url('del', ['id'=> $v.shipping_id ])}" onclick="if(confirm('确实要删除这条送货方式信息吗？')) return true;else return false;" title="移除">移除</a>
+                    </td>
+                </tr>
+            {/volist}
+            <tr>
+                <td align="right" nowrap="true" colspan="6" style="background-color: rgb(255, 255, 255);">
+                    {$page_list}
+                </td>
+            </tr>
+            </tbody></table>
+
+    </div>
+    <!-- end goods Article list -->
+</form>

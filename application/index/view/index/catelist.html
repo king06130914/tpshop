@@ -1,0 +1,231 @@
+{include file="layout/indexheader" /}
+<div class="i_bg">
+    <div class="postion">
+        {if condition="count($pathData) eq 3"}
+        <span class="fl">全部 > {$pathData[0]} > {$pathData[1]} > {$pathData[2]} </span>
+        {elseif condition="count($pathData) eq 2" /}
+        <span class="fl">全部 > {$pathData[0]} > {$pathData[1]} </span>
+        {else /}
+        <span class="fl">全部 > {$pathData[0]} </span>
+        {/if}
+    </div>
+    <!--Begin 筛选条件 Begin-->
+    <div class="content mar_10">
+        <table border="0" class="choice" style="width:100%; font-family:'宋体'; margin:0 auto;" cellspacing="0" cellpadding="0">
+            <tr valign="top">
+                <td width="70">&nbsp; 品牌：</td>
+                <td class="td_a">
+                    <a  href="{:url('Search/search?cat_id='.input('param.cat_id'))}#search" {if condition="!input('param.brand')"}class="now"{/if} >不限</a>
+                    {volist name="brandInfo" id="v"}
+                        <a href="{:url('Search/search?cat_id='.input('param.cat_id').'&brand='.$v['brand_id'].'&price='.input('param.price'))}#search" {if condition="input('param.brand') eq $v['brand_id']"}class="now"{/if} >{$v.brand_name}</a>
+                    {/volist}
+                </td>
+            </tr>
+            <tr valign="top">
+                <td>&nbsp; 价格：</td>
+                <td class="td_a">
+                    <a  href="{:url('Search/search?cat_id='.input('param.cat_id'))}#search" {if condition="!input('param.price')"}class="now"{/if} >不限</a>
+                    {volist name="price" id="v"}
+                    <a href="{:url('Search/search?cat_id='.input('param.cat_id').'&price='.$v.'&brand='.input('param.brand'))}#search" {if condition="input('param.price') eq $v"}class="now"{/if} >{$v}</a>
+                    {/volist}
+                </td>
+            </tr>
+
+            <?php
+            //先看有几个属性
+            $attrDatacount = count($attrData);
+            $sa = input('param.search_attr');
+            if($sa)
+                $_attr_arr = explode('-',$sa);
+            else
+                $_attr_arr = array_fill(0,$attrDatacount,0);//构造一个数组，每个元素来存属性的id。默认是0
+            foreach($attrData as $k=>$v):?>
+            <tr>
+                <td style="width:100px;">&nbsp; {$v.attr_name}：</td>
+                <td class="td_a">
+                    <a  href="<?php $_tmp_attr_arr = $_attr_arr; $_tmp_attr_arr[$k]=0; echo url('Search/search?cat_id='.input('param.cat_id').'&search_attr='.implode('-',$_tmp_attr_arr));?>#search" {if condition="input('param.search_attr') eq '0-0'"}class="now"{/if} >不限</a>
+                    <?php foreach($v['attr_value'] as $k1=>$v1):
+                    //用全零的数组为开始的数组然后只修改当前这个属性的值
+                    $_tmp_attr_arr = $_attr_arr; //初始化
+                    //把这个属性的值放到相应的位置上
+                    $_tmp_attr_arr[$k] = $v1['attr_value'].','.$v['attr_id'];
+                    ?>
+                    <a href="{:url('Search/search?cat_id='.input('param.cat_id').'&search_attr='.implode('-',$_tmp_attr_arr))}#search" {if condition="input('param.search_attr') eq implode('-',$_tmp_attr_arr)"}class="now"{/if} >{$v1.attr_value}</a>
+                    <?php endforeach;?>
+                </td>
+            </tr>
+            <?php endforeach;?>
+        </table>
+    </div>
+    <!--End 筛选条件 End-->
+
+    <div class="content mar_20">
+        <div class="l_history">
+            <div class="his_t">
+                <span class="fl">浏览历史</span>
+                <span class="fr"><a onclick="emptyHistory();" href="javascript:void(0)">清空</a></span>
+            </div>
+            <ul>
+                {volist name="historyData" id="v" offset="0" length="5"}
+                    <li>
+                        <div class="img"><a href="{:url('Index/detail?goods_id='.$v['goods_id'])}"><img src="__PUBLIC__/../{$v.goods_img}" width="185" height="162" /></a></div>
+                        <div class="name"><a href="{:url('Index/detail?goods_id='.$v['goods_id'])}">{$v.goods_name}</a></div>
+                        <div class="price">
+                            <font>￥<span>{$v.shop_price}</span></font> &nbsp; 18R
+                        </div>
+                    </li>
+                {/volist}
+            </ul>
+        </div>
+        <div class="l_list">
+            <div class="list_t">
+            	<span class="fl list_or">
+                    <a href="{:url('Search/search?cat_id='.input('param.cat_id').'&price='.input('param.price').'&ob=sales_volume')}#search" {if condition="input('param.ob') eq 'xl'"}class="now"{/if}>
+                    	<span class="fl">销量</span>
+                    </a>
+                    <a href="{:url('Search/search?cat_id='.input('param.cat_id').'&price='.input('param.price').'&ob=shop_price&ow='.(input('param.ow')=='asc' ? 'desc' : 'asc'))}#search" {if condition="input('param.ob') eq 'shop_price'"}class="now"{/if} >
+                    	<span class="fl">价格</span>
+                        <span class="i_up">价格从低到高显示</span>
+                        <span class="i_down">价格从高到低显示</span>
+                    </a>
+                    <a href="{:url('Search/search?cat_id='.input('param.cat_id').'&price='.input('param.price').'&ob=add_time')}#search" {if condition="input('param.ob') eq 'add_time'"}class="now"{/if}>新品</a>
+                </span>
+                <span class="fr">共发现{$goodslist->total()}件</span>
+            </div>
+            <div class="list_c">
+
+                <ul class="cate_list">
+                    {volist name="goodslist" id="v"}
+                    <li>
+                        <div class="img"><a href="{:url('index/detail', ['goods_id' => $v.goods_id, 'cat_id' => input('param.cat_id')])}"><img src="__PUBLIC__/../{$v.goods_img}" width="210" height="185" /></a></div>
+                        <div class="price">
+                            <font>￥<span>{$v.shop_price}</span></font> &nbsp; 26R
+                        </div>
+                        <div class="name"><a href="{:url('index/detail', ['goods_id' => $v.goods_id, 'cat_id' => input('param.cat_id')])}">{$v.goods_name}</a></div>
+                        <div class="carbg">
+                            <a goods_id="{$v.goods_id}" onclick="addcollect(this)" href="javascript:void(0);" class="ss">收藏</a>
+                            <a goods_id="{$v.goods_id}" onclick="addcart(this)" href="javascript:void(0);" class="j_car">加入购物车</a>
+                        </div>
+                    </li>
+                    {/volist}
+                </ul>
+
+                <div class="pages">
+                    {$goodslist->render()}
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!--Begin 弹出层-收藏成功 Begin-->
+    <div id="fade" class="black_overlay"></div>
+    <div id="MyDiv" class="white_content">
+        <div class="white_d">
+            <div class="notice_t">
+                <span class="fr" style="margin-top:10px; cursor:pointer;" onclick="CloseDiv('MyDiv','fade')"><img src="__IPUBLIC__/images/close.gif" /></span>
+            </div>
+            <div class="notice_c">
+
+                <table border="0" align="center" style="margin-top:;" cellspacing="0" cellpadding="0">
+                    <tr valign="top">
+                        <td width="40"><img src="__IPUBLIC__/images/suc.png" /></td>
+                        <td>
+                            <span style="color:#3e3e3e; font-size:18px; font-weight:bold;">您已成功收藏该商品</span><br />
+                            <a href="{:url('Member/collect')}">查看我的收藏 >></a>
+                        </td>
+                    </tr>
+                    <tr height="50" valign="bottom">
+                        <td>&nbsp;</td>
+                        <td><a href="javascript:void(0);" onclick="CloseDiv('MyDiv','fade')" class="b_sure">确定</a></td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <!--End 弹出层-收藏成功 End-->
+    <!--Begin 弹出层-加入购物车 Begin-->
+    <div id="fade1" class="black_overlay"></div>
+    <div id="MyDiv1" class="white_content">
+        <div class="white_d">
+            <div class="notice_t">
+                <span class="fr" style="margin-top:10px; cursor:pointer;" onclick="CloseDiv_1('MyDiv1','fade1')"><img src="__IPUBLIC__/images/close.gif" /></span>
+            </div>
+            <div class="notice_c">
+
+                <table border="0" align="center" style="margin-top:;" cellspacing="0" cellpadding="0">
+                    <tr valign="top">
+                        <td width="40"><img src="__IPUBLIC__/images/suc.png" /></td>
+                        <td id="res">
+
+                        </td>
+                    </tr>
+                    <tr height="50" valign="bottom">
+                        <td>&nbsp;</td>
+                        <td><a href="{:url('Cart/buycar1')}" class="b_sure">去购物车结算</a><a href="{:url('Search/search?cat_id='.$catId)}" class="b_buy">继续购物</a></td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <!--End 弹出层-加入购物车 End-->
+    <script>
+        //使用ajax加入购物车
+        function addcart(a){
+            _this = $(a);
+            var id = _this.attr('goods_id');
+            $.ajax({
+                type:"POST",
+                url: "{:url('Cart/addCart')}",
+                dataType:'json',
+                data:{'num':1,'id':id},
+                success:function(result){
+                    if(result.state == 200){
+                        $('#res').html('<span style="color:#3e3e3e; font-size:18px; font-weight:bold;">宝贝已成功添加到购物车</span><br />');
+                        ShowDiv_1('MyDiv1','fade1');
+                    }else{
+                        layer.msg(result.info, {time:1000,icon: 5});
+                    }
+                }
+            });
+        }
+        //使用ajax加入收藏
+        function addcollect(a){
+            _this = $(a);
+            var id = _this.attr('goods_id');
+            $.ajax({
+                type:"POST",
+                url: "{:url('Index/addcollect')}",
+                dataType:'json',
+                data:{'id':id},
+                success:function(result){
+                    if(result.state == 200){
+                        $('#res').html('<span style="color:#3e3e3e; font-size:18px; font-weight:bold;">宝贝已成功添加到收藏</span><br />');
+                        ShowDiv_1('MyDiv','fade');
+                    }else{
+                        layer.msg(result.info, {time:1000,icon: 5});
+                    }
+                }
+            });
+        }
+        
+        function emptyHistory() {
+            $.ajax({
+                type:"POST",
+                url: "{:url('Index/emptyHistory')}",
+                dataType:'json',
+                success:function(result){
+                    if(result.state == 200){
+                        layer.msg(result.info, {time:1000,icon: 6}, function () {
+                            $('.l_history ul').empty();
+                        });
+                    }else{
+                        layer.msg(result.info, {time:1000,icon: 5});
+                    }
+                }
+            });
+        }
+    </script>

@@ -1,0 +1,37 @@
+
+<form method="post" action="" name="listForm">
+    <!-- start goods cat list -->
+    <div class="list-div" id="listDiv">
+
+        <table width="100%" cellpadding="3" cellspacing="1" id="listTable">
+            <tbody>
+            <tr>
+                <th>序号</th>
+                <th>商品类型名称</th>
+                <th>属性分组</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            {volist name="info" id="v"}
+                <tr align="center">
+                    <td>{$v.type_id}</td>
+                    <td align="left" style="width:350px;text-indent:100px;">{$v.type_name}</td>
+                    <td></td>
+                    <td><img src="__APUBLIC__/images/{$state[$v.enabled]}.gif"/></td>
+                    <td>
+                        <a href="{:url('attribute/index', ['id'=> $v.type_id ])}" title="属性列表">属性列表</a> |
+                        <a href="{:url('edit', ['id'=> $v.type_id ])}" title="编辑">编辑</a> |
+                        <a href="{:url('del', ['id'=> $v.type_id ])}" onclick="if(confirm('确实要删除这条分类信息吗？')) return true;else return false;" title="移除">移除</a>
+                    </td>
+                </tr>
+            {/volist}
+            <tr>
+                <td align="right" nowrap="true" colspan="6" style="background-color: rgb(255, 255, 255);">
+                    {$page_list}
+                </td>
+            </tr>
+            </tbody></table>
+
+    </div>
+    <!-- end goods cat list -->
+</form>

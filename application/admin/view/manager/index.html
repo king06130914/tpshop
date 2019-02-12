@@ -1,0 +1,48 @@
+
+<div class="form-div">
+    <form action="" method="get" name="searchForm">
+        角色<select name="role_id" style="width: 100px;">
+        <option selected="" value="">请选择</option>
+        {volist name='roleInfo' id='v'}
+            <option value="{$v.role_id}" {if condition="isset($search.mg_role_id) and ($v.role_id eq $search.mg_role_id)"}selected{/if}>{$v.role_name}</option>
+        {/volist}
+    </select>
+        <input type="submit" value=" 搜索 " class="button">
+    </form>
+</div>
+
+<form method="post" action="" name="listForm">
+    <!-- start goods type list -->
+    <div class="list-div" id="listDiv">
+
+        <table width="100%" cellpadding="3" cellspacing="1" id="listTable">
+            <tbody>
+            <tr style="text-align: center">
+                <th>序号</th>
+                <th>管理员名称</th>
+                <th>创建时间</th>
+                <th>角色</th>
+                <th>操作</th>
+            </tr>
+            {volist name="info" id="v"}
+                <tr align="center">
+                    <td>{$v.mg_id}</td>
+                    <td >{$v.mg_name}</td>
+                    <td>{$v.mg_time|date='Y-m-d H:i:s',###}</td>
+                    <td>{if condition="$v['mg_name']=='admin'"}超级管理员{else/}{$rinfo[$v['mg_role_id']]}{/if}</td>
+                    <td>
+                        <a href="{:url('edit', ['id'=> $v.mg_id ])}" title="编辑">编辑</a> |
+                        <a href="{:url('del', ['id'=> $v.mg_id ])}" onclick="if(confirm('确实要删除这条管理员信息吗？')) return true;else return false;" title="移除">移除</a>
+                    </td>
+                </tr>
+            {/volist}
+            <tr>
+                <td align="right" nowrap="true" colspan="6" style="background-color: rgb(255, 255, 255);">
+                    {$page_list}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- end goods type list -->
+</form>

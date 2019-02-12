@@ -1,0 +1,48 @@
+
+<div class="form-div">
+    <form action="" method="get" name="searchForm">
+        <img src="__APUBLIC__/images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH">
+        权限名称<input type="text" name="auth_name" {if condition="isset($search.auth_name)"}value="{$search.auth_name}"{/if} size="15">
+        <input type="submit" value=" 搜索 " class="button">
+    </form>
+</div>
+
+<form method="post" action="" name="listForm">
+    <!-- start goods auth list -->
+    <div class="list-div" id="listDiv">
+        <table width="100%" cellpadding="3" cellspacing="1" id="listTable">
+            <tbody>
+            <tr>
+                <th>序号</th>
+                <th>权限名称</th>
+                <th>父id</th>
+                <th>控制器</th>
+                <th>操作方法</th>
+                <th>全路径</th>
+                <th>等级</th>
+                <th>操作</th>
+            </tr>
+            {volist name="info" id="v"}
+                <tr align="center">
+                    <td>{$v.auth_id}</td>
+                    <td align="left">{$ge|str_repeat=count(explode('-',$v['auth_path']))-1}{$v.auth_name}</td>
+                    <td>{$v.auth_pid}</td>
+                    <td>{$v.auth_c}</td>
+                    <td>{$v.auth_a}</td>
+                    <td >{$v.auth_path}</td>
+                    <td>{$v.auth_level}</td>
+                    <td>
+                        <a href="{:url('edit', ['id'=> $v.auth_id ])}" title="编辑">编辑</a> |
+                        <a href="{:url('del', ['id'=> $v.auth_id ])}" onclick="if(confirm('确实要删除这条权限信息吗？')) return true;else return false;" title="移除">移除</a>
+                    </td>
+                </tr>
+            {/volist}
+            <tr>
+                <td align="right" nowrap="true" colspan="8" style="background-color: rgb(255, 255, 255);">
+                    {$page_list}
+                </td>
+            </tr>
+            </tbody></table>
+    </div>
+    <!-- end goods auth list -->
+</form>

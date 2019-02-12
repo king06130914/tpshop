@@ -1,0 +1,49 @@
+
+<div class="form-div">
+    <form action="" method="get" name="searchForm">
+        <img src="__APUBLIC__/images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH">
+        订单编号：<input type="text" name="deal_order_sn" {if condition="isset($search.deal_order_sn)"}value="{$search.deal_order_sn}"{/if} size="15">
+        订单状态：<select name="deal_status">
+        <option value="">-请选择-</option>
+        {volist name="status" id="v" key="k"}
+            <option value="{$k-1}" {if condition="isset($search.deal_status) and (($k-1) eq $search.deal_status)"}selected{/if}>{$v}</option>
+        {/volist}
+    </select>
+        <input type="submit" value=" 搜索 " class="button">
+    </form>
+</div>
+
+<form method="post" action="" name="listForm">
+    <!-- start goods deal list -->
+    <div class="list-div" id="listDiv">
+
+        <table width="100%" cellpadding="3" cellspacing="1" id="listTable">
+            <tbody>
+            <tr>
+                <th>序号</th>
+                <th>订单编号</th>
+                <th>订单修改后状态</th>
+                <th>修改时间</th>
+                <th>修改信息</th>
+                <th>操作人</th>
+            </tr>
+            {volist name="info" id="v"}
+                <tr align="center">
+                    <td>{$v.deal_id}</td>
+                    <td>{$v.deal_order_sn}</td>
+                    <td>{$status[$v['deal_status']]}</td>
+                    <td>{$v.deal_time}</td>
+                    <td>{$v.deal_info}</td>
+                    <td >{$v.deal_admin_name}</td>
+                </tr>
+            {/volist}
+            <tr>
+                <td align="right" nowrap="true" colspan="6" style="background-color: rgb(255, 255, 255);">
+                    {$page_list}
+                </td>
+            </tr>
+            </tbody></table>
+
+    </div>
+    <!-- end goods deal list -->
+</form>

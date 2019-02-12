@@ -1,0 +1,43 @@
+
+<div class="form-div">
+    <form action="" name="searchForm" method="get">
+        <img src="__APUBLIC__/images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH">
+        分类名称<input cat="text" name="cat_name" {if condition="isset($search.cat_name)"}value="{$search.cat_name}"{/if} size="15">
+        <input type="submit" value=" 搜索 " class="button">
+    </form>
+</div>
+<form method="post" action="" name="listForm">
+    <!-- start goods cat list -->
+    <div class="list-div" id="listDiv">
+
+        <table width="100%" cellpadding="3" cellspacing="1" id="listTable">
+            <tbody>
+            <tr>
+                <th>序号</th>
+                <th>商品分类名称</th>
+                <th>父id</th>
+                <th>全路径</th>
+                <th>操作</th>
+            </tr>
+            {volist name="info" id="v"}
+                <tr align="center">
+                    <td>{$v.cat_id}</td>
+                    <td align="left" style="width:350px;text-indent:100px;">{$ge|str_repeat=count(explode(',',$v['cat_path']))-2}{$v.cat_name}</td>
+                    <td>{$v.cat_pid}</td>
+                    <td>{$v.cat_path}</td>
+                    <td>
+                        <a href="{:url('edit', ['id'=> $v.cat_id ])}" title="编辑">编辑</a> |
+                        <a href="{:url('del', ['id'=> $v.cat_id ])}" onclick="if(confirm('确实要删除这条分类信息吗？')) return true;else return false;" title="移除">移除</a>
+                    </td>
+                </tr>
+            {/volist}
+            <tr>
+                <td align="right" nowrap="true" colspan="6" style="background-color: rgb(255, 255, 255);">
+                    {$page_list}
+                </td>
+            </tr>
+            </tbody></table>
+
+    </div>
+    <!-- end goods cat list -->
+</form>

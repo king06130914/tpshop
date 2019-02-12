@@ -1,0 +1,60 @@
+
+<div class="main-div">
+    <form action="" method="post" name="theForm">
+        <table cellspacing="1" cellpadding="1" width="100%">
+            <tbody>
+            <tr>
+                <td class="label">文章标题:</td>
+                <td><input type="text" name="article_title" value="" size="40">
+                    <span class="require-field">*</span></td>
+            </tr>
+            <tr>
+                <td class="label">文章分类:</td>
+                <td>
+                    <select name="article_cat_id">
+                        <option value="">所有分类</option>
+                        {volist name="cats" id="v"}
+                        <option value="{$v['cat_id']}">{$v['cat_name']}</option>
+                        {/volist}
+                    </select>
+                    <span class="require-field">*</span></td>
+            </tr>
+            <tr>
+                <td class="label">文章内容:</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table width="90%" id="detail-table">
+                        <tbody><tr>
+                            <td>
+                                <!-- 加载编辑器的容器 -->
+                                <script id="container" name="article_content" type="text/plain">
+
+                                </script>
+                                <!-- 配置文件 -->
+                                <script type="text/javascript" src="__PUBLIC__/plugins/ueditor/ueditor.config.js"></script>
+                                <!-- 编辑器源码文件 -->
+                                <script type="text/javascript" src="__PUBLIC__/plugins/ueditor/ueditor.all.js"></script>
+                                <!-- 实例化编辑器 -->
+                                <script type="text/javascript">
+                                    var ue = UE.getEditor('container',{
+                                        "initialFrameWidth":"100%",//宽
+                                        "initialFrameHeight":300,  //高
+                                        "maximumWords":10000 //最大可以输入的字符数量
+                                    });
+                                </script>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr align="center">
+                <td colspan="2">
+                    <input type="submit" value=" 确定 " class="button">
+                    <input type="reset" value=" 重置 " class="button">
+                </td>
+            </tr>
+            </tbody></table>
+    </form>
+</div>

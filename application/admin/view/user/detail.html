@@ -1,0 +1,30 @@
+<!-- comment content list -->
+<div class="main-div">
+    <form action="" method="post">
+        <input type="hidden" value="{$info.id}" name="id" />
+        <table width="100%">
+            <tr>
+                <td>
+                    <a href="{:url('user/index')}"><b>{$info.sender}</b></a>&nbsp;于      &nbsp;{$info.add_time|date='Y-m-d H:i:s',###}&nbsp;对&nbsp;<b>{$info.receiver}</b>&nbsp;发表评论    </td>
+            </tr>
+            <tr>
+                <td><hr color="#dadada" size="1"></td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="overflow:hidden; word-break:break-all;">{$info.msg}</div>
+                    <div align="right"><b>评论等级:</b> 5&nbsp;&nbsp;<b>IP地址</b>: {$info.ip_address}</div>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">
+                    状态:<select name="state">
+                    <option value="0" {eq name="info.state" value="0"}selected{/eq} >隐藏</option>
+                    <option value="1" {eq name="info.state" value="1"}selected{/eq} >显示</option>
+                </select>
+                    <input type="submit" value="确定" class="button" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

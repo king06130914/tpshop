@@ -1,0 +1,350 @@
+{include file="layout/indexheader" /}
+<div class="i_bg">
+    <div class="postion">
+        {if condition="count($pathData) eq 3"}
+        <span class="fl">全部 > {$pathData[0]} > {$pathData[1]} > {$pathData[2]} > {$goodsInfo.goods_name}</span>
+        {elseif condition="count($pathData) eq 2" /}
+        <span class="fl">全部 > {$pathData[0]} > {$pathData[1]} > {$goodsInfo.goods_name}</span>
+        {else /}
+        <span class="fl">全部 > {$pathData[0]} > {$goodsInfo.goods_name}</span>
+        {/if}
+    </div>
+    <div class="content">
+        <div id="tsShopContainer">
+            <div id="tsImgS"><a href="__PUBLIC__/../{$goodsInfo.goods_img}" title="__PUBLIC__/../{$goodsInfo.goods_img}" class="MagicZoom" id="MagicZoom"><img src="__PUBLIC__/../{$goodsInfo.goods_img}" width="390" height="390" /></a></div>
+            <div id="tsPicContainer">
+                <div id="tsImgSArrL" onclick="tsScrollArrLeft()"></div>
+                <div id="tsImgSCon">
+                    <ul>
+                        {volist name="goodgal" id="v" key="k"}
+                            <li onclick="" rel="MagicZoom"><img src="__PUBLIC__/../{$v.img_url}" tsImgS="__PUBLIC__/../{$v.img_url}" width="79" height="79" /></li>
+                        {/volist}
+                    </ul>
+                </div>
+                <div id="tsImgSArrR" onclick="tsScrollArrRight()"></div>
+            </div>
+        </div>
+
+        <div class="pro_des">
+            <div class="des_name">
+                <p>{$goodsInfo.goods_name}</p>
+                {$goodsInfo.goods_brief}
+            </div>
+            <div class="des_price">
+                本店价格：<b>￥{$goodsInfo.shop_price}</b><br />
+                市场价格：<span>￥<s>{$goodsInfo.market_price}</s></span><br/>
+            </div>
+
+            {volist name="gaData1" id="v"}
+                <div class="des_choice">
+                    <span class="fl">{$key}：</span>
+                    <ul>
+                        {volist name="v" id="v1"}
+                            <li goods_attr_id="{$v1.goods_attr_id}" {eq name="key" value="0"}class="checked"{/eq}>{$v1.attr_value}<div class="ch_img"></div></li>
+                        {/volist}
+                    </ul>
+                </div>
+            {/volist}
+
+            <div class="des_share">
+                <div class="d_sh">
+                    分享
+                    <div class="d_sh_bg">
+                        <a href="#"><img src="__IPUBLIC__/images/sh_1.gif" /></a>
+                        <a href="#"><img src="__IPUBLIC__/images/sh_2.gif" /></a>
+                        <a href="#"><img src="__IPUBLIC__/images/sh_3.gif" /></a>
+                        <a href="#"><img src="__IPUBLIC__/images/sh_4.gif" /></a>
+                        <a href="#"><img src="__IPUBLIC__/images/sh_5.gif" /></a>
+                    </div>
+                </div>
+                <div class="d_care"><a goods_id="{$goodsInfo.goods_id}" onclick="addcollect(this)" href="javascript:void(0);">收藏商品</a></div>
+            </div>
+            <div class="des_join">
+                <div class="j_nums">
+                    <input type="text" value="1" name="goods_number" class="n_ipt" />
+                    <input type="button" value="" onclick="addUpdate(this);" class="n_btn_1" />
+                    <input type="button" value="" onclick="jianUpdate(this);" class="n_btn_2" />
+                </div>
+                <span class="fl"><a onclick="addcart()"><img src="__IPUBLIC__/images/j_car.png" /></a></span>
+            </div>
+        </div>
+
+        <div class="s_brand">
+            <div class="s_brand_img"><img src="__PUBLIC__/../{$gbData['brand_logo']}" width="188" height="132" /></div>
+            <div class="s_brand_c"><a href="#">进入品牌专区</a></div>
+        </div>
+
+
+    </div>
+    <div class="content mar_20">
+        <div class="l_history">
+            <div class="fav_t">用户还喜欢</div>
+            <ul>
+                {volist name="likeData" id="v" offset="0" length="5"}
+                    <li>
+                        <div class="img"><a href="{:url('Index/detail?goods_id='.$v['goods_id'])}"><img src="__PUBLIC__/../{$v.goods_img}" width="185" height="162" /></a></div>
+                        <div class="name"><a href="{:url('Index/detail?goods_id='.$v['goods_id'])}">{$v.goods_name}</a></div>
+                        <div class="price">
+                            <font>￥<span>{$v.shop_price}</span></font> &nbsp; 18R
+                        </div>
+                    </li>
+                {/volist}
+            </ul>
+        </div>
+        <div class="l_list">
+            <div class="des_border">
+                <div class="des_tit">
+                    <ul>
+                        <li class="current"><a href="#p_attribute">商品属性</a></li>
+                        <li><a href="#p_details">商品详情</a></li>
+                        <li><a href="#p_comment">商品评论</a></li>
+                    </ul>
+                </div>
+                <div class="des_con" id="p_attribute">
+                    <table border="0" align="center" style="width:100%; font-family:'宋体'; margin:10px auto;" cellspacing="0" cellpadding="0">
+                        <tr>
+                            {volist name="gaData2" id="v" offset="0" length="4"}
+                                <td>{$v.attr_name}：{$v.attr_value}</td>
+                            {/volist}
+                        </tr>
+                        <tr>
+                            {volist name="gaData2" id="v" offset="4" length="4"}
+                            <td>{$v.attr_name}：{$v.attr_value}</td>
+                            {/volist}
+                        </tr>
+                        <tr>
+                            {volist name="gaData2" id="v" offset="8" length="4"}
+                            <td>{$v.attr_name}：{$v.attr_value}</td>
+                            {/volist}
+                        </tr>
+                    </table>
+
+
+                </div>
+            </div>
+
+            <div class="des_border" id="p_details">
+                <div class="des_t">商品详情</div>
+                <div class="des_con">
+                    <table border="0" align="center" style="width:745px; font-size:14px; font-family:'宋体';" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="265"><img src="__PUBLIC__/../{$goodsInfo.goods_img}" height="412" /></td>
+                            <td>
+                                <b>{$goodsInfo.goods_name}</b><br /><br/>
+                                {volist name="gaData2" id="v"}
+                                    【{$v.attr_name}】：{$v.attr_value}<br /><br/>
+                                {/volist}
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p align="center">
+                        {volist name="goodgal" id="v" offset="0" length="3"}
+                            <img src="__PUBLIC__/../{$v.img_url}" width="746" height="400" /><br /><br />
+                        {/volist}
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="des_border" id="p_comment">
+                <div class="des_t">商品评论</div>
+
+                <table border="0" class="jud_tab" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="175" class="jud_per">
+                            <p>80.0%</p>好评度
+                        </td>
+                        <td width="300">
+                            <table border="0" style="width:100%;" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="90">好评<font color="#999999">（80%）</font></td>
+                                    <td><img src="__IPUBLIC__/images/pl.gif" align="absmiddle" /></td>
+                                </tr>
+                                <tr>
+                                    <td>中评<font color="#999999">（20%）</font></td>
+                                    <td><img src="__IPUBLIC__/images/pl.gif" align="absmiddle" /></td>
+                                </tr>
+                                <tr>
+                                    <td>差评<font color="#999999">（0%）</font></td>
+                                    <td><img src="__IPUBLIC__/images/pl.gif" align="absmiddle" /></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="185" class="jud_bg">
+                            购买过  <span style="font-weight: bold;">{$goodsInfo.goods_name}</span>  的顾客，在收到商品才可以对该商品发表评论
+                        </td>
+                        <td class="jud_bg">您可对已购买商品进行评价<br />
+                            {if condition="in_array(4,$orderInfo)"}
+                                <a goods_id="{:input('param.goods_id')}" onclick="disp_prompt(this)" href="javascript:void(0)"><img src="__IPUBLIC__/images/btn_jud.gif" /></a>
+                                {else/}
+                                <span>你暂时无法评论商品</span>
+                            {/if}
+                        </td>
+                    </tr>
+                </table>
+
+                <table border="0" class="jud_list" style="width:100%; margin-top:30px;" cellspacing="0" cellpadding="0">
+                    {volist name="messageData" id="v"}
+                        <tr valign="top">
+                            <td width="160"><img src="__IPUBLIC__/images/peo1.jpg" width="20" height="20" align="absmiddle" />&nbsp;{$v.sender}</td>
+                            <td width="180">
+                                颜色分类：<font color="#999999">粉色</font> <br />
+                                型号：<font color="#999999">50ml</font>
+                            </td>
+                            <td>
+                                {$v.msg}<br />
+                                <font color="#999999">{$v.add_time|date='Y-m-d H:i:s',###}</font>
+                            </td>
+                        </tr>
+                    {/volist}
+                </table>
+
+                <div class="pages" style="float: right;">
+                    {$messageData->render()}
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <!--Begin 弹出层-收藏成功 Begin-->
+    <div id="fade" class="black_overlay"></div>
+    <div id="MyDiv" class="white_content">
+        <div class="white_d">
+            <div class="notice_t">
+                <span class="fr" style="margin-top:10px; cursor:pointer;" onclick="CloseDiv_1('MyDiv','fade')"><img src="__IPUBLIC__/images/close.gif" /></span>
+            </div>
+            <div class="notice_c">
+                <table border="0" align="center" style="margin-top:;" cellspacing="0" cellpadding="0">
+                    <tr valign="top">
+                        <td width="40"><img src="__IPUBLIC__/images/suc.png" /></td>
+                        <td>
+                            <span style="color:#3e3e3e; font-size:18px; font-weight:bold;">您已成功收藏该商品</span><br />
+                            <a href="{:url('Member/collect')}">查看我的收藏 >></a>
+                        </td>
+                    </tr>
+                    <tr height="50" valign="bottom">
+                        <td>&nbsp;</td>
+                        <td><a href="javascript:void(0);" onclick="CloseDiv_1('MyDiv','fade')" class="b_sure">确定</a></td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <!--End 弹出层-收藏成功 End-->
+
+    <!--Begin 弹出层-加入购物车 Begin-->
+    <div id="fade1" class="black_overlay"></div>
+    <div id="MyDiv1" class="white_content">
+        <div class="white_d">
+            <div class="notice_t">
+                <span class="fr" style="margin-top:10px; cursor:pointer;" onclick="CloseDiv_1('MyDiv1','fade1')"><img src="__IPUBLIC__/images/close.gif" /></span>
+            </div>
+            <div class="notice_c">
+
+                <table border="0" align="center" style="margin-top:;" cellspacing="0" cellpadding="0">
+                    <tr valign="top">
+                        <td width="40"><img src="__IPUBLIC__/images/suc.png" /></td>
+                        <td id="res">
+
+                        </td>
+                    </tr>
+                    <tr height="50" valign="bottom">
+                        <td>&nbsp;</td>
+                        <td><a href="{:url('cart/buycar1')}" class="b_sure">去购物车结算</a><a href="{:url('/')}" class="b_buy">继续购物</a></td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <!--End 弹出层-加入购物车 End-->
+    <script>
+        $('#tsImgSCon li').hover(function(){
+            $(this).addClass('tsSelectImg');
+        },function(){
+            $(this).removeClass('tsSelectImg');
+        });
+
+        //点击切换选中效果
+        $('.des_choice').find('li').click(function(){
+            $(this).parent().parent().find('li').removeClass('checked');
+            $(this).toggleClass('checked');
+        });
+
+        //使用ajax加入购物车
+        function addcart(){
+            var num =  $('input[name="goods_number"]').val();
+            var id = "{$goodsInfo.goods_id}";
+            var attrlen = $('.des_choice').length;
+            var attr = '';
+            for(var i=0;i<attrlen;i++){
+                attr += $('.des_choice .checked').eq(i).attr('goods_attr_id')+',';
+            }
+
+            $.ajax({
+                type:"POST",
+                url: "{:url('cart/addCart')}",
+                dataType:'json',
+                data:{'num':num,'id':id,'attr':attr},
+                success:function(result){
+                    if (result.state == 200) {
+                        $('#res').html('<span style="color:#3e3e3e; font-size:18px; font-weight:bold;">宝贝已成功添加到购物车</span><br />');
+                        ShowDiv_1('MyDiv1','fade1');
+                    } else {
+                        layer.msg(result.info, {time:1000,icon: 5});
+                    }
+                }
+            });
+        }
+
+        //使用ajax加入收藏
+        function addcollect(a){
+            _this = $(a);
+            var id = _this.attr('goods_id');
+
+            var attrlen = $('.des_choice').length;
+            var attr = '';
+            for(var i=0;i<attrlen;i++){
+                attr += $('.des_choice .checked').eq(i).attr('goods_attr_id')+',';
+            }
+            $.ajax({
+                type:"POST",
+                url: "{:url('Index/addcollect')}",
+                dataType:'json',
+                data:{'id':id,'attr':attr},
+                success:function(result){
+                    if(result.state == 200){
+                        $('#res').html('<span style="color:#3e3e3e; font-size:18px; font-weight:bold;">宝贝已成功添加到收藏</span><br />');
+                        ShowDiv_1('MyDiv','fade');
+                    }else{
+                        layer.msg(result.info, {time:1000,icon: 5});
+                    }
+                }
+            });
+        }
+
+        //ajax实现评论
+        function disp_prompt(a) {
+            var comment=prompt("请输入您的评价","");
+            var goods_id= $(a).attr('goods_id');
+            $.ajax({
+                type:"POST",
+                url: "{:url('Order/ajaxcomment')}",
+                dataType:'json',
+                data:{'goods_id':goods_id,'comment':comment},
+                success:function(result){
+                    if(result.state == 200){
+                        var data = result.data;
+                        newtr = "<tr valign=\"top\"><td width=\"160\"><img src=\"__IPUBLIC__/images/peo1.jpg\" width=\"20\" height=\"20\" align=\"absmiddle\" />&nbsp;"+data.sender+"</td> <td width=\"180\">颜色分类：<font color=\"#999999\">粉色</font> <br />型号：<font color=\"#999999\">50ml</font> </td> <td>"+data.msg+"<br /> <font color=\"#999999\">"+data.add_time+"</font> </td> </tr>";
+                        $('.jud_list').prepend(newtr);
+                    }
+                }
+            });
+        }
+    </script>

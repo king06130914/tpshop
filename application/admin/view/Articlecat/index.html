@@ -1,0 +1,49 @@
+
+<div class="form-div">
+    <form action="" method="get" name="searchForm">
+        文章分类名称<input type="text" name="cat_name" {if condition="isset($search.cat_name)"}value="{$search.cat_name}"{/if} size="15">
+        <!-- 分类 -->
+        <select name="cat_id">
+            <option value="0">所有分类</option>
+            {volist name="cats" id="v"}
+            <option value="{$v['cat_id']}" {if condition="isset($search.cat_id) and ($v.cat_id eq $search.cat_id)"}selected{/if}>{$v['cat_name']}</option>
+            {/volist}
+        </select>
+        <input type="submit" value=" 搜索 " class="button">
+    </form>
+</div>
+
+<form method="post" action="" name="listForm">
+    <!-- start goods Article list -->
+    <div class="list-div" id="listDiv">
+        <table width="100%" cellpadding="3" cellspacing="1" id="listTable">
+            <tbody>
+            <tr>
+                <th>序号</th>
+                <th>文章分类名称</th>
+                <th>文章分类描述</th>
+                <th>排序依据</th>
+                <th>操作</th>
+            </tr>
+            {volist name="info" id="v"}
+                <tr align="center">
+                    <td>{$v.cat_id}</td>
+                    <td>{$v.cat_name}</td>
+                    <td>{$v.cat_desc}</td>
+                    <td>{$v.sort_order}</td>
+                    <td>
+                        <a href="{:url('edit', ['id'=> $v.cat_id ])}" title="编辑">编辑</a> |
+                        <a href="{:url('del', ['id'=> $v.cat_id ])}" onclick="if(confirm('确实要删除这条文章分类吗？')) return true;else return false;" title="移除">移除</a>
+                    </td>
+                </tr>
+            {/volist}
+            <tr>
+                <td align="right" nowrap="true" colspan="8" style="background-color: rgb(255, 255, 255);">
+                    {$page_list}
+                </td>
+            </tr>
+            </tbody></table>
+
+    </div>
+    <!-- end goods Article list -->
+</form>

@@ -1,0 +1,235 @@
+{include file="layout/indexheader" /}
+<div class="i_bg bg_color">
+    <div class="i_ban_bg">
+        <!--Begin Banner Begin-->
+        <div class="banner">
+            <div class="top_slide_wrap">
+                <ul class="slide_box bxslider">
+                    {volist name="adsData" id="v" length="4"}
+                        <li><a href="{:url('detail?goods_id='.$v['goods_id'])}" target="_blank"><img src="__PUBLIC__/../{$v.ad_img}" width="740" height="401" title="{$v.ad_name}"/></a></li>
+                    {/volist}
+                </ul>
+                <div class="op_btns clearfix">
+                    <a href="#" class="op_btn op_prev"><span></span></a>
+                    <a href="#" class="op_btn op_next"><span></span></a>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            //var jq = jQuery.noConflict();
+            (function(){
+                $(".bxslider").bxSlider({
+                    auto:true,
+                    prevSelector:jq(".top_slide_wrap .op_prev")[0],nextSelector:jq(".top_slide_wrap .op_next")[0]
+                });
+            })();
+        </script>
+        <!--End Banner End-->
+        <div class="inews">
+            <div class="touXiang">
+                <div class="photo_user"><img src="__IPUBLIC__/images/user.jpg"></div>
+                <p>{:input('session.web_user')}</p>
+                <p>Vip:&nbsp;<span>9</span> &nbsp;<span>200R</span></p>
+            </div>
+            <div class="news_t">
+                <span class="fr"><a href="#">更多 ></a></span>新闻资讯
+            </div>
+            <ul style="height:220px;">
+                {volist name="articleData" id="v"}
+                    <li><span>[ {$v.cat_name} ]</span><a href="{:url('news?id='.$v['article_id'])}">{$v.article_title}</a></li>
+                {/volist}
+            </ul>
+        </div>
+    </div>
+    <!--Begin 热门商品 Begin-->
+    <div class="content mar_10">
+        <div class="h_l_img">
+            <div class="img"><a target="_blank" href="{:url('index/detail', ['goods_id' => $getHotBestGoods[0]['goods_id']])}"><img src="__PUBLIC__/../{$getHotBestGoods[0]['goods_img']}" width="188" height="188" /></a></div>
+            <div class="pri_bg">
+                <span class="price fl">￥{$getHotBestGoods[0]['shop_price']}</span>
+                <span class="fr">16R</span>
+            </div>
+        </div>
+        <div class="hot_pro">
+            <div id="featureContainer">
+                <div id="feature">
+                    <div id="block">
+                        <div id="botton-scroll">
+                            <ul class="featureUL">
+                                {volist name="getHotgoods" id="v"}
+                                <li class="featureBox">
+                                    <div class="box">
+                                        <div class="h_icon"><img src="__IPUBLIC__/images/hot.png" width="50" height="50" /></div>
+                                        <div class="imgbg">
+                                            <a target="_blank" href="{:url('detail?goods_id='.$v['goods_id'])}"><img src="__PUBLIC__/../{$v.goods_img}" width="160" height="136" /></a>
+                                        </div>
+                                        <div class="name">
+                                            <a target="_blank" href="{:url('detail?goods_id='.$v['goods_id'])}">
+                                                <h2>{$v.goods_name}</h2>
+                                                {$v.goods_brief}
+                                            </a>
+                                        </div>
+                                        <div class="price">
+                                            <font>￥<span>{$v.shop_price}</span></font> &nbsp; 26R
+                                        </div>
+                                    </div>
+                                </li>
+                                {/volist}
+                            </ul>
+                        </div>
+                    </div>
+                    <a class="h_prev" href="javascript:void(0);">Previous</a>
+                    <a class="h_next" href="javascript:void(0);">Next</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Begin 限时特卖 Begin-->
+    <div class="i_t mar_10">
+        <span class="fl">限时特卖</span>
+        <span class="i_mores fr"><a href="{:url('Search/search')}">更多</a></span>
+    </div>
+    <div class="content">
+        <div class="i_sell">
+            <div id="imgPlay">
+                <ul class="imgs" id="actor">
+                    {volist name="goodsPromote" id="v" length="3"}
+                    <li><a target="_blank" href="{:url('detail?goods_id='.$v['goods_id'])}"><img src="__PUBLIC__/../{$v.goods_img}" width="211" height="357" /></a></li>
+                    {/volist}
+                </ul>
+                <div class="previ">上一张</div>
+                <div class="nexti">下一张</div>
+            </div>
+        </div>
+        <div class="sell_right">
+            {volist name="goodsPromote" id="v" length="4"}
+            <div class="sell_{$key+1}">
+                <div class="s_img"><a target="_blank" href="{:url('detail?goods_id='.$v['goods_id'])}"><img src="__PUBLIC__/../{$v.goods_img}" width="185" height="155" /></a></div>
+                <div class="s_price">￥<span>{$v.promote_price}</span></div>
+                <div class="s_name">
+                    <h2><a target="_blank" href="{:url('detail?goods_id='.$v['goods_id'])}">{$v.goods_name}</a></h2>
+                    倒计时：<span><?php echo date('H 时 i 分 s 秒',$v['promote_end_time']-time());?></span>
+                </div>
+            </div>
+            {/volist}
+
+            {volist name="goodsPromote" id="v" length="2"}
+            <div class="sell_b{$key+1}">
+                <div class="sb_img"><a target="_blank" href="#"><img src="__PUBLIC__/../{$v.goods_img}" width="242" height="356" /></a></div>
+                <div class="s_price">￥<span>{$v.promote_price}</span></div>
+                <div class="s_name">
+                    <h2><a target="_blank" href="#{:url('detail?goods_id='.$v['goods_id'])}">{$v.goods_name}</a></h2>
+                    倒计时：<span><?php echo date('H 时 i 分 s 秒',$v['promote_end_time']-time());?></span>
+                </div>
+            </div>
+            {/volist}
+        </div>
+    </div>
+    <!--End 限时特卖 End-->
+    <div class="content mar_20">
+        <img src="__IPUBLIC__/images/mban_1.jpg" width="1200" height="110" />
+    </div>
+
+    <!--Begin 数码家电 Begin-->
+    <div class="i_t mar_10">
+        <span class="floor_num">6F</span>
+        <span class="fl">数码家电</span>
+        <span class="i_mores fr">
+            {volist name="cat" id="v" length="10"}
+            {if condition="$v.cat_pid neq 0"}
+            <a target="_blank" href="{:url('Search/search?cat_id='.$v['cat_id'])}">{$v.cat_name}</a>&nbsp; &nbsp;|&nbsp;
+            {/if}
+            {/volist}
+        </span>
+    </div>
+    <div class="content">
+        <div class="tel_left">
+            <div class="tel_ban">
+                <div id="imgPlay6">
+                    <ul class="imgs" id="actor5">
+                        {volist name="getHotBestGoods" id="v" length="3"}
+                            <li><a target="_blank" href="{:url('detail?goods_id='.$v['goods_id'])}"><img src="__PUBLIC__/../{$v.goods_img}" width="211" height="286" /></a></li>
+                        {/volist}
+                    </ul>
+                    <div class="prev_t">上一张</div>
+                    <div class="next_t">下一张</div>
+                </div>
+            </div>
+            <div class="fresh_txt">
+                <div class="fresh_txt_c">
+                    {volist name="cat" id="v" length="12"}
+                        {if condition="$v.cat_pid neq 0"}
+                        <a target="_blank" href="{:url('Search/search?cat_id='.$v['cat_id'])}">{$v.cat_name}</a>
+                        {/if}
+                    {/volist}
+                </div>
+            </div>
+        </div>
+        <div class="fresh_mid">
+            <ul>
+                {volist name="goodsData" id="v"}
+                    <li>
+                        <div class="name"><a target="_blank" href="{:url('detail?goods_id='.$v['goods_id'])}">{$v.goods_name}</a></div>
+                        <div class="price">
+                            <font>￥<span>{$v.shop_price}</span></font> &nbsp; 25R
+                        </div>
+                        <div class="img"><a target="_blank" href="{:url('detail?goods_id='.$v['goods_id'])}"><img src="__PUBLIC__/../{$v.goods_img}" width="185" height="155" /></a></div>
+                    </li>
+                {/volist}
+            </ul>
+        </div>
+        <div class="fresh_right">
+            <ul>
+                {volist name="adsData" id="v" length="2"}
+                    <li><a target="_blank" href="#"><img src="__PUBLIC__/../{$v.ad_img}" width="260" height="220" /></a></li>
+                {/volist}
+            </ul>
+        </div>
+    </div>
+    <!--End 数码家电 End-->
+    <!--Begin 猜你喜欢 Begin-->
+    <div class="i_t mar_10">
+        <span class="fl">猜你喜欢</span>
+    </div>
+    <div class="like">
+        <div id="featureContainer1">
+            <div id="feature1">
+                <div id="block1">
+                    <div id="botton-scroll1">
+                        <ul class="featureUL">
+                            {volist name="sugglike" id="v"}
+                            <li class="featureBox">
+                                <div class="box">
+                                    <div class="imgbg">
+                                        <a href="#"><img src="__PUBLIC__/../{$v.goods_img}" width="160" height="136" /></a>
+                                    </div>
+                                    <div class="name">
+                                        <a href="#">
+                                            <h2>{$v.goods_brief}</h2>
+                                            {$v.goods_name}
+                                        </a>
+                                    </div>
+                                    <div class="price">
+                                        <font>￥<span>{$v.shop_price}</span></font>
+                                    </div>
+                                </div>
+                            </li>
+                            {/volist}
+                        </ul>
+                    </div>
+                </div>
+                <a class="l_prev" href="javascript:void(0);">Previous</a>
+                <a class="l_next" href="javascript:void(0);">Next</a>
+            </div>
+        </div>
+    </div>
+    <!--End 猜你喜欢 End-->
+    <!--友情链接-->
+    <div style="padding-left:80px;">
+        <p>友情链接</p>
+        {volist name="linkData" id="v"}
+            <a href="{$v.alink}" target="_blank">{$v.title}</a>&nbsp;&nbsp;
+        {/volist}
+    </div>
+
+

@@ -1,0 +1,220 @@
+
+<div class="i_bg">
+    <div class="content mar_20">
+        <img src="__IPUBLIC__/images/img2.jpg" />
+    </div>
+
+    <!--Begin 第二步：确认订单信息 Begin -->
+    <form action="{:url('buycar2')}" method="post" name="order_form">
+    <div class="content mar_20">
+        <div class="two_bg">
+            <div class="two_t">
+                商品列表
+            </div>
+            <table border="0" class="car_tab" style="width:1110px;" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td class="car_th" width="550">商品名称</td>
+                    <td class="car_th" width="140">属性</td>
+                    <td class="car_th" width="150">购买数量</td>
+                    <td class="car_th" width="130">小计</td>
+                </tr>
+                <?php
+                $tp = 0; //总价
+                foreach($cartData2 as $k=>$v):?>
+                <tr class="{eq name='$i%2' value='0'}car_tr{/eq}" goods_id="{$v.goods_id}" goods_attr_id="{$v.goods_attr_id}">
+                    <input type="hidden" name="cart_id[]" value="{$v.cart_id}"/>
+                    <td>
+                        <div class="c_s_img"><img src="__PUBLIC__/../{$v.goods_thumb}" width="73" height="73" /></div>
+                        {$v.goods_name}
+                    </td>
+                    <td align="center">{$v.goods_attr_str}</td>
+                    <td align="center">
+                        <div class="c_num">
+                            <input type="button" value="" onclick="jianUpdate1(jq(this));" class="car_btn_1" />
+                            <input type="text" value="{$v.goods_number}" name="" class="car_ipt" />
+                            <input type="button" value="" onclick="addUpdate1(jq(this));" class="car_btn_2" />
+                        </div>
+                    </td>
+                    <td align="center" style="color:#ff4e00;">￥<font><?php $xj = $v['shop_price']*$v['goods_number']; $tp+=$xj; echo sprintf("%.2f",$xj);?></font></td>
+                </tr>
+                <?php endforeach;?>
+
+                <tr class="total">
+                    <td colspan="5" align="right" style="font-family:'Microsoft YaHei';">
+                        商品总价：￥<font>{$tp|sprintf='%.2f',###}</font>
+                    </td>
+                </tr>
+
+            </table>
+
+            <div class="two_t">
+                收货人信息
+            </div>
+            <table border="0" class="peo_tab" style="width:1110px;" cellspacing="0" cellpadding="0">
+                <tr align="center">
+                    <td class="car_th" width="50"></td>
+                    <td class="car_th" width="100">收货人姓名</td>
+                    <td class="car_th" width="100">邮政编码</td>
+                    <td class="car_th" width="100">电话</td>
+                    <td class="car_th" width="100">邮箱</td>
+                    <td class="car_th" width="300">详细地址</td>
+                </tr>
+                {volist name="addressData" id="v"}
+                    <tr align="center">
+                        <td><input type="radio" name="order_consignee_id" checked="checked" value="{$v.address_id}" /></td>
+                        <td  style="font-size:14px;"><b>{$v.consignee}</b></td>
+                        <td>{$v.zipcode}</td>
+                        <td>{$v.telephone}</td>
+                        <td>{$v.email}</td>
+                        <td align="left">{$v.province}{$v.city}{$v.district}{$v.street}{$v.detail_address}</td>
+                    </tr>
+                {/volist}
+
+                <tr align="center">
+                    <td><input type="radio" name="order_consignee_id" value=""/></td>
+                    <td><input type="text" size="10" name="consignee" value=""/></td>
+                    <td><input type="text" size="10" name="zipcode" value=""/></td>
+                    <td><input type="text" size="10" name="telephone" value=""/></td>
+                    <td><input type="text" size="10" name="email" value=""/></td>
+                    <td>
+                        <div style="width: 260px;">
+                            <select name="province" id="province_id" style="width:80px;">
+                                <option selected="selected">请选择</option>
+                                {volist name="province_list" id="province"}
+                                    <option  value="{$province.region_id}">{$province.region_name}</option>
+                                {/volist}
+                            </select>
+                            <select name="city"  id="city_id" style="width:80px;" >
+                                <option selected="selected">请选择</option>
+
+                            </select>
+                            <select name="district"  id="district_id" style="width:80px;" >
+                                <option value="0" selected="selected">请选择</option>
+
+                            </select>
+                        </div>
+                        详细地址：<input type="text" name="detail_address" value=""/>
+                    </td>
+                </tr>
+            </table>
+
+
+            <div class="two_t">
+                配送方式
+            </div>
+            <table border="0" class="car_tab" style="width:1110px;" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td class="car_th" width="80"></td>
+                    <td class="car_th" width="200">名称</td>
+                    <td class="car_th" width="370">订购描述</td>
+                    <td class="car_th" width="150">费用</td>
+                    <td class="car_th" width="135">免费额度</td>
+                </tr>
+                {volist name="shipData" id="v"}
+                    <tr>
+                        <td align="center"><input type="radio" name="order_ship_name" checked="checked" value="{$v.shipping_name}" /></td>
+                        <td align="center" style="font-size:14px;"><b>{$v.shipping_name}</b></td>
+                        <td>{$v.shipping_desc}</td>
+                        <td align="center">￥{$v.shipping_fee}</td>
+                        <td align="center">￥0.00</td>
+                    </tr>
+                {/volist}
+            </table>
+
+            <div class="two_t">
+                支付方式
+            </div>
+            <ul class="pay">
+                {volist name="payData" id="v"}
+                    <li {if condition="$key eq 0"}class="checked"{/if} ><input type="radio" name="order_pay_name" value="{$v.pay_name}" {if condition="$key eq 0"}checked="checked"{/if} />{$v.pay_name}<div class="ch_img"></div></li>
+                {/volist}
+            </ul>
+
+            <div class="two_t">
+                其他信息
+            </div>
+            <table border="0" class="car_tab" style="width:1110px;" cellspacing="0" cellpadding="0">
+                <tr valign="top">
+                    <td align="right" style="padding-right:0;"><b style="font-size:14px;">订单备注：</b></td>
+                    <td style="padding-left:0;"><textarea class="add_txt" name="order_remarks" style="width:860px; height:50px;"></textarea></td>
+                </tr>
+            </table>
+
+            <table border="0" style="width:1100px; margin-top:20px;" cellspacing="0" cellpadding="0">
+                <tr height="70">
+                    <td align="right">
+                        <b style="font-size:14px;">应付款金额：<span style="font-size:22px; color:#ff4e00;">￥<font class="last_total">{$tp|sprintf='%.2f',###}</font></span></b>
+                    </td>
+                </tr>
+                <tr height="70">
+                    <td align="right"><a href="javascript:void(0);" onclick="$('form[name=order_form]').submit()"><img src="__IPUBLIC__/images/btn_sure.gif" /></a></td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+    </form>
+    <!--End 第二步：确认订单信息 End-->
+    <script>
+        $("#province_id").change(function(){
+            var province_id=$(this).val();
+            $.ajax({
+                url:"{:url('cart/get_citys')}",
+                Type:"POST",
+                data:"province_id="+province_id,
+                dataType:"json",
+                success:function(data){
+                    var city = data.city;
+                    var option=$("<option></option>");
+                    $(option).val("0");
+                    $(option).html("请选择");
+                    var option1=$("<option></option>");
+                    $(option1).val("0");
+                    $(option1).html("请选择");
+                    $("#city_id").html(option);
+                    $("#district_id").html(option1);
+                    for(var i in city){
+                        var option=$("<option></option>");
+                        $(option).val(city[i]['region_id']);
+                        $(option).html(city[i]['region_name']);
+                        $("#city_id").append(option);
+                    }
+                }
+
+            });
+        });
+        $("#city_id").change(function(){
+            var city_id=$(this).val();
+            $.ajax({
+                url:"{:url('cart/get_district')}",
+                Type:"POST",
+                data:"city_id="+city_id,
+                dataType:"json",
+                success:function(data){
+                    var district = data.district;
+                    var option=$("<option></option>");
+                    $(option).val("0");
+                    $(option).html("请选择");
+                    $("#district_id").html(option);
+                    for(var i in district){
+                        var option=$("<option></option>");
+                        $(option).val(district[i]['region_id']);
+                        $(option).html(district[i]['region_name']);
+                        $("#district_id").append(option);
+                    }
+                }
+            });
+        });
+
+        function ajaxUpdateCartData(goodsId,goodsAttrId,goodsNumber){
+            $.post("{:url('cart/ajaxUpdateData','',false)}", {'gid': goodsId,'gaid':goodsAttrId,'gn':goodsNumber} );
+        }
+        //点击属性框切换选中效果
+        $('.pay').find('li').click(function(){
+            $(this).parent().find('li').removeClass('checked');
+            $(this).toggleClass('checked');
+
+            $(this).parent().find('input').prop('checked',false);
+            $(this).find('input').prop('checked',true);
+        });
+    </script>

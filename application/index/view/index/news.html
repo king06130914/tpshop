@@ -1,0 +1,47 @@
+{include file="layout/indexheader" /}
+<div class="i_bg">
+    <div class="content mar_20">
+        <div class="l_history">
+            <div class="his_t">
+                <span class="fl">浏览历史</span>
+                <span class="fr"><a onclick="emptyHistory();" href="javascript:void(0)">清空</a></span>
+            </div>
+            <ul>
+                {volist name="historyData" id="v" offset="0" length="5"}
+                <li>
+                    <div class="img"><a href="{:url('Index/detail?goods_id='.$v['goods_id'])}"><img src="__PUBLIC__/../{$v.goods_img}" width="185" height="162" /></a></div>
+                    <div class="name"><a href="{:url('Index/detail?goods_id='.$v['goods_id'])}">{$v.goods_name}</a></div>
+                    <div class="price">
+                        <font>￥<span>{$v.shop_price}</span></font> &nbsp; 18R
+                    </div>
+                </li>
+                {/volist}
+            </ul>
+        </div>
+        <div class="l_list">
+            <div class="news_content">
+                <div class="con_1"><h2>{$article.article_title}</h2></div>
+                <div class="announce-detail--wrapper_content__main">
+                    {$article.article_content}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function emptyHistory() {
+            $.ajax({
+                type:"POST",
+                url: "{:url('Index/emptyHistory')}",
+                dataType:'json',
+                success:function(result){
+                    if(result.state == 200){
+                        layer.msg(result.info, {time:1000,icon: 6}, function () {
+                            $('.l_history ul').empty();
+                        });
+                    }else{
+                        layer.msg(result.info, {time:1000,icon: 5});
+                    }
+                }
+            });
+        }
+    </script>

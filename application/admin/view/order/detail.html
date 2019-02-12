@@ -1,0 +1,46 @@
+
+<div class="form-div">
+    <form action="" method="post" name="searchForm">
+        <img src="__APUBLIC__/images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH">
+        商品名称<input type="text" name="goods_name" {if condition="isset($search.goods_name)"}value="{$search.goods_name}"{/if} size="15">
+        <input type="submit" value=" 搜索 " class="button">
+    </form>
+</div>
+
+<form method="post" action="" name="listForm">
+    <!-- start goods order list -->
+    <div class="list-div" id="listDiv">
+
+        <table width="100%" cellpadding="3" cellspacing="1" id="listTable">
+            <tbody>
+            <tr>
+                <th>编号</th>
+                <th>订单ID</th>
+                <th>商品ID</th>
+                <th>商品名称</th>
+                <th>商品图片</th>
+                <th>商品价格</th>
+                <th>成交价格</th>
+                <th>购买数量</th>
+                <th>商品属性</th>
+                <th>商品小计</th>
+            </tr>
+            {volist name="info" id="v"}
+                <tr align="center">
+                    <td>{$v.rec_id}</td>
+                    <td>{$v.order_id}</td>
+                    <td>{$v.goods_id}</td>
+                    <td>{$v.goods_name}</td>
+                    <td><img src="__APUBLIC__/Uploads/{$v.goods_img}" width="60"/></td>
+                    <td>{$v.shop_price}</td>
+                    <td>{$v.goods_price}</td>
+                    <td>{$v.goods_number}</td>
+                    <td>{$v.goods_attr}</td>
+                    <td >{$v.subtotal}</td>
+                </tr>
+            {/volist}
+            </tbody></table>
+
+    </div>
+    <!-- end goods order list -->
+</form>

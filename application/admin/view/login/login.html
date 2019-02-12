@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{__NOLAYOUT__}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="__APUBLIC__/styles/general.css" rel="stylesheet" type="text/css" />
+<link href="__APUBLIC__/styles/main.css" rel="stylesheet" type="text/css" />
+</head>
+<body style="background: #278296">
+<form method="post" onsubmit="doSubmit();return false;">
+  <table cellspacing="0" cellpadding="0" style="margin-top: 100px" align="center">
+  <tr>
+    <td><img src="__APUBLIC__/images/login.png" width="178" height="256" border="0" alt="ECSHOP" /></td>
+    <td style="padding-left: 50px">
+      <table>
+      <tr>
+        <td>管理员姓名：</td>
+        <td><input type="text" name="username" /></td>
+      </tr>
+      <tr>
+        <td>管理员密码：</td>
+        <td><input type="password" name="password" /></td>
+      </tr>
+      <tr>
+        <td>验证码：</td>
+        <td><input type="text" name="captcha" class="capital" /></td>
+      </tr>
+      <tr>
+        <td colspan="2" align="right"><img src="{:url('login/show_captcha')}" width="145" height="20" alt="CAPTCHA" border="1" onclick="this.src=this.src+'?'" style="cursor: pointer;" title="看不清？点击更换另一个验证码。" />
+        </td>
+      </tr>
+      <tr><td colspan="2"><input type="checkbox" value="1" name="remember" id="remember" /><label for="remember">请保存我这次的登录信息</label></td></tr>
+      <tr><td>&nbsp;</td><td><input type="submit" value="进入管理中心" class="button" /></td></tr>
+      <tr>
+        <td colspan="2" align="right">&raquo; <a href="{:url('/')}" style="color:white">返回首页</a> &raquo; <a href="javascript:;" onclick="reset_pwd();" style="color:white">你忘记了密码吗？</a></td>
+      </tr>
+      </table>
+    </td>
+  </tr>
+  </table>
+  <!--<input type="hidden" name="act" value="signin" />-->
+</form>
+<script src="__APUBLIC__/js/jquery-2.1.1.min.js"></script>
+<script src="__PUBLIC__/plugins/layer/layer.js"></script>
+<script>
+    function doSubmit() {
+        var username = $("input[name='username']").val();
+        var password = $("input[name='password']").val();
+        var captcha = $("input[name='captcha']").val();
+        $.ajax({
+            type: "post",
+            url: "{:url('login/login')}",
+            dataType:"json",
+            data: {"password": password,"username": username,"captcha": captcha},
+            success: function(result){
+                //成功提示弹窗
+                if (result.state == 200) {
+                    layer.msg(result.info, {time:1000,icon: 6}, function () {
+                        window.location.href = "{:url('/admin')}";
+                    });
+                } else {
+                    layer.msg(result.info, {time:1000,icon: 5});
+                }
+            }
+        });
+    }
+
+    function reset_pwd() {
+        var username = $("input[name='username']").val();
+        if(username == ''){
+            layer.alert("请先输入您的管理员姓名", {icon: 5});
+            return false;
+        }
+
+        $.ajax({
+            type: "post",
+            url: "{:url('login/reset_pwd')}",
+            dataType:"json",
+            data: {"username": username},
+            success: function(result){
+                //成功提示弹窗
+                if (result.state == 200) {
+                    layer.msg(result.info, {time:1500,icon: 6});
+                } else {
+                    layer.msg(result.info, {time:1500,icon: 5});
+                }
+            }
+        });
+    }
+</script>
+</body>
